@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>list</title>
+        <script src="vendor/jquery-1.10.0.js"></script>
+        <script src="vendor/JsRender.min.js"></script>
+        <!--<script src="vendor/jquery.tmpl.min.js">-->
+    </head>
+    <body>
+        <table border="1" cellpadding="5" cellspacing="5" >
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody id="list">
+
+            </tbody>
+
+        </table>
+        <!--<script id="myTmpl" type="text/x-jsrender">
+        {{for Data}}
+        <tr>
+        <td>{{:Id}}</td>
+        <td>{{:Name}}</td>
+        <td>{{:Email}}</td>
+        </tr>
+        {{/for}}
+        </script>-->
+        <script id="myTmpl" type="text/x-jsrender">
+        <tr>
+        <td>{{:Id}}</td>
+        <td>{{:Name}}</td>
+        <td>{{:Email}}</td>
+        </tr>
+        </script>
+        <script id="myList" type="text/x-jsrender">
+            {{for Data tmpl="#myTmpl"/}}
+        </script>
+        <script type="text/javascript">
+            $(function(){
+                 //var markup="<tr><td>${Id}</td><td>${Name}</td><td>${Email}</td></tr>";
+                 var tmpl=$.templates("#myList");
+                 $.ajax({
+                     url:"http://192.168.10.243:8090/v1/user?limit=20",
+                     type:"GET",
+                     dataType:"json",
+                     success:function(res){
+                       var html=tmpl.render(res);
+                       $("#list").html(html);
+                      //var con=res.Data;
+                      //$.template("conTemplates",markup )
+                      //$.tmpl("conTemplates",con).appendTo("#list");
+
+
+                     }
+                 });
+
+
+            });
+        </script>
+    </body>
+</html>

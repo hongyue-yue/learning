@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>login</title>
+        <script src="vendor/jquery-1.10.0.js"></script>
+        <script src="vendor/jquery.validate-1.13.1.js"></script>
+        <style type="text/css">
+            #userLogin{width: 270px;margin: 0 auto;}
+            #login{margin-left:70px}
+            label.error{color:red}
+            input.error{border: 1px solid red}
+
+        </style>
+    </head>
+    <body>
+            <form id="userLogin">
+                <fieldset>
+                <legend>用户登录</legend>
+                <p>
+                    <label for="username">用户名:</label>
+                    <input type="text" name="username" id="username">
+                </p>
+                <p>
+                    <label for="password">密&nbsp&nbsp&nbsp&nbsp码:</label>
+                    <input type="password" name="password" id="password">
+                </p>
+                <p>
+                    <input type="submit" id="login" value="登录" name="login"/>
+                    <input type="button" id="register" value="注册" name="register"/>
+
+                </p>
+                </fieldset>
+            </form>
+
+        <script >
+        $(function () {
+            $("form").validate({
+                debug: true,
+                //onsubmit:true,
+                rules: {
+                    username: {
+                        required: true,
+                        minlength: 2,
+                        maxlength: 10
+                    },
+                    password: {
+                        required: true,
+                        minlength: 2,
+                        maxlength: 16
+                    },
+                },
+                messages: {
+                    username: {
+                        required: '请输入用户名',
+                        minlength: '用户名不能小于2个字符',
+                        maxlength: '用户名不能超过10个字符',
+                        remote: '用户名不存在'
+                    },
+                    password: {
+                        required: '请输入密码',
+                        minlength: '密码不能小于2个字符',
+                        maxlength: '密码不能超过16个字符'
+                    },
+
+                },
+                highlight:function(element,errorClass,validClass){
+                    $(element).addClass(errorClass).removeClass(validClass);
+                    $(element).fadeOut().fadeIn();
+                },
+                submitHandler:function(){
+
+                    var para={
+                        "name": $("#username").val(),
+                        "password": $("#password").val(),
+                    };
+                    var con=JSON.stringify(para);
+                    $.ajax({
+                        url:"http://192.168.10.243:8090/v1/auth/login",
+                        type:"POST",
+                        data:con,
+                        contentType:"application/json",
+                        dataType:"json",
+                        statusCode:{
+                          200:function(){
+                              window.location="list.html";
+                          },
+                          403:function(){
+                             alert("用户名或密码错误");
+                         },
+                          400:function(){
+                             alert("请求错误");
+                         }
+                     }
+                    });
+                }
+
+            });
+
+          $("#register").click(function(){
+              window.location("register.html");
+          });
+
+        });
+
+        </script>
+    </body>
+</html>
