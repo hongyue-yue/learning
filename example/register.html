@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>login</title>
+        <script src="vendor/jquery-1.10.0.js"></script>
+        <script src="vendor/jquery.validate-1.13.1.js"></script>
+        <style type="text/css">
+            #userRegister{width: 280px;margin: 0 auto;}
+            #submit{margin-left: 100px}
+            label.error{color:red}
+            input.error{border: 1px solid red}
+        </style>
+    </head>
+    <body>
+            <form id="userRegister">
+                <fieldset>
+                <legend>用户注册</legend>
+                <p>
+                    <label for="regname">用&nbsp&nbsp户&nbsp&nbsp名:</label>
+                    <input type="text" name="username" id="regname">
+                </p>
+                <p>
+                    <label for="email">邮&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp箱:</label>
+                    <input type="text" name="email" id="email">
+                </p>
+                <p>
+                    <label for="regword">密&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp码:</label>
+                    <input type="password" name="password" id="regword">
+                </p>
+                <p>
+                    <label for="confirm-password">确认密码:</label>
+                    <input type="password" name="confirm_password" id="confirm-password">
+                </p>
+                <p>
+                    <input type="submit" value="提交" id="submit">
+                </p>
+                </fieldset>
+            </form>
+        <script >
+        $(function () {
+            $("form").validate({
+                debug: true,
+                rules: {
+                    username: {
+                        required: true,
+                        minlength: 2,
+                        maxlength: 10
+                    },
+                    password: {
+                        required: true,
+                        minlength: 2,
+                        maxlength: 16
+                    },
+                    email:{
+                        required:true,
+                        email:true
+                    },
+                    confirm_password: {
+                        equalTo: "#regword"
+                    }
+                },
+                messages: {
+                    username: {
+                        required: '请输入用户名',
+                        minlength: '用户名不能小于2个字符',
+                        maxlength: '用户名不能超过10个字符',
+                        remote: '用户名不存在'
+                    },
+                    password: {
+                        required: '请输入密码',
+                        minlength: '密码不能小于2个字符',
+                        maxlength: '密码不能超过16个字符'
+                    },
+                    email:{
+                        required:'请输入邮箱地址',
+                        email:'请输入正确的邮箱格式'
+                    },
+                    confirm_password: {
+                        equalTo: "两次输入密码不一致"
+                    }
+                },
+                highlight:function(element,errorClass,validClass){
+                    $(element).addClass(errorClass).removeClass(validClass);
+                    $(element).fadeOut().fadeIn();
+                },
+                submitHandler:function(){
+                    //var para=$("#userRegister").serialize();
+                    //alert("11111");
+                    var para={
+                        name:$("#regname").val() ,
+                        email:$("#email").val(),
+                        password:$("#regword").val(),
+                    };
+                    var con=JSON.stringify(para);
+
+                    $.ajax({
+                        url:"http://192.168.10.243:8090/v1/auth/register",
+                        type:"POST",
+                        contentType:"application/json",
+                        data: con,
+                        /*success:function(data){
+                            window.location="list.html";
+                        },*/
+                        statusCode:{
+                          200:function(){
+                              window.location="list.html";
+                          },
+                      }
+                    });
+                }
+            });
+
+
+        });
+
+        </script>
+    </body>
+</html>
