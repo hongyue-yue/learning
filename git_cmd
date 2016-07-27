@@ -13,3 +13,7 @@ git remote add <name> <url>  请使用remote指令添加远程数据库。在<na
 git push <repository> <refspec>       使用push命令向数据库推送更改内容。<repository>处输入目标地址，<refspec>处指定推送的分支。
 git clone <repository> <directory>    使用clone指令可以复制数据库，在<repository>指定远程数据库的URL，在<directory>指定新目录的名称。
 git pull <repository> <refspec>       将远程数据库内容下拉到本地数据库
+git checkout HEAD@{commit号码}        回到（commit号码）指定文件版次
+git checkout master                   回到当前文件版次
+git remote -v                         可查看每个远程库的名字及地址
+git diff (commit号码1) (commit号码2)   查看两个版次间的区别
