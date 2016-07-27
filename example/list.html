@@ -19,8 +19,11 @@
             <tbody id="list">
 
             </tbody>
-
         </table>
+
+        <input type="button" value="上一页" id="pres" style="display:none">
+        <input type="button" value="下一页" id="next">
+
         <!--<script id="myTmpl" type="text/x-jsrender">
         {{for Data}}
         <tr>
@@ -45,7 +48,8 @@
                  //var markup="<tr><td>${Id}</td><td>${Name}</td><td>${Email}</td></tr>";
                  var tmpl=$.templates("#myList");
                  $.ajax({
-                     url:"http://192.168.10.243:8090/v1/user?limit=20",
+                     url:"http://192.168.10.243:8090/v1/user?limit=2",
+                     //url :"http://192.168.10.243:8090/v1/user?limit=20"
                      type:"GET",
                      dataType:"json",
                      success:function(res){
@@ -54,11 +58,42 @@
                       //var con=res.Data;
                       //$.template("conTemplates",markup )
                       //$.tmpl("conTemplates",con).appendTo("#list");
-
-
                      }
                  });
-
+                $("#next").click(function(){
+                    var number=$("#list tr:last td:first").html();
+                    $("#pres").css("display","inline");
+                    $.ajax({
+                        url:"http://192.168.10.243:8090/v1/user?limit=2&last="+number,
+                        type:"GET",
+                        dataType:"json",
+                        success:function(res){
+                            var html=tmpl.render(res);
+                            $("#list").html(html);
+                            var num=$("#list tr:last td:first").html();
+                            if(num>=7){
+                                $("#next").css("display","none");
+                            }
+                        }
+                    });
+                });
+                $("#pres").click(function(){
+                    var number=$("#list tr:first td:first").html()-3;
+                    $("#next").css("display","inline");
+                    $.ajax({
+                        url:"http://192.168.10.243:8090/v1/user?limit=2&last="+number,
+                        type:"GET",
+                        dataType:"json",
+                        success:function(res){
+                            var html=tmpl.render(res);
+                            $("#list").html(html);
+                            var num=$("#list tr:first td:first").html();
+                            if(num<=1){
+                                $("#pres").css("display","none");
+                            }
+                        }
+                    });
+                });
 
             });
         </script>
