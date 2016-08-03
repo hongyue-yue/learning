@@ -1,101 +1,202 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <title>list</title>
-        <script src="vendor/jquery-1.10.0.js"></script>
-        <script src="vendor/JsRender.min.js"></script>
-        <!--<script src="vendor/jquery.tmpl.min.js">-->
-    </head>
-    <body>
-        <table border="1" cellpadding="5" cellspacing="5" >
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                </tr>
-            </thead>
-            <tbody id="list">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>list</title>
+    <script src="vendor/jquery-1.10.0.js"></script>
+    <script src="vendor/JsRender.min.js"></script>
+    <script src="vendor/jquery.validate-1.13.1.js"></script>
+    <!--<script src="vendor/jquery.tmpl.min.js">-->
+</head>
+<body>
+    <table border="1" cellpadding="5" cellspacing="5" >
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Operation</th>
+            </tr>
+        </thead>
+        <tbody id="list">
 
-            </tbody>
-        </table>
+        </tbody>
+    </table>
 
-        <input type="button" value="上一页" id="pres" style="display:none">
-        <input type="button" value="下一页" id="next">
+    <input type="button" value="上一页" id="pre" style="display:none">
+    <input type="button" value="下一页" id="next">
 
-        <!--<script id="myTmpl" type="text/x-jsrender">
-        {{for Data}}
-        <tr>
-        <td>{{:Id}}</td>
-        <td>{{:Name}}</td>
-        <td>{{:Email}}</td>
-        </tr>
-        {{/for}}
-        </script>-->
-        <script id="myTmpl" type="text/x-jsrender">
-        <tr>
-        <td>{{:Id}}</td>
-        <td>{{:Name}}</td>
-        <td>{{:Email}}</td>
-        </tr>
-        </script>
-        <script id="myList" type="text/x-jsrender">
-            {{for Data tmpl="#myTmpl"/}}
-        </script>
-        <script type="text/javascript">
-            $(function(){
-                 //var markup="<tr><td>${Id}</td><td>${Name}</td><td>${Email}</td></tr>";
-                 var tmpl=$.templates("#myList");
-                 $.ajax({
-                     url:"http://192.168.10.243:8090/v1/user?limit=2",
-                     //url :"http://192.168.10.243:8090/v1/user?limit=20"
-                     type:"GET",
-                     dataType:"json",
-                     success:function(res){
-                       var html=tmpl.render(res);
-                       $("#list").html(html);
-                      //var con=res.Data;
-                      //$.template("conTemplates",markup )
-                      //$.tmpl("conTemplates",con).appendTo("#list");
-                     }
-                 });
-                $("#next").click(function(){
-                    var number=$("#list tr:last td:first").html();
-                    $("#pres").css("display","inline");
-                    $.ajax({
-                        url:"http://192.168.10.243:8090/v1/user?limit=2&last="+number,
-                        type:"GET",
-                        dataType:"json",
-                        success:function(res){
-                            var html=tmpl.render(res);
-                            $("#list").html(html);
-                            var num=$("#list tr:last td:first").html();
-                            if(num>=7){
-                                $("#next").css("display","none");
-                            }
-                        }
-                    });
-                });
-                $("#pres").click(function(){
-                    var number=$("#list tr:first td:first").html()-3;
-                    $("#next").css("display","inline");
-                    $.ajax({
-                        url:"http://192.168.10.243:8090/v1/user?limit=2&last="+number,
-                        type:"GET",
-                        dataType:"json",
-                        success:function(res){
-                            var html=tmpl.render(res);
-                            $("#list").html(html);
-                            var num=$("#list tr:first td:first").html();
-                            if(num<=1){
-                                $("#pres").css("display","none");
-                            }
-                        }
-                    });
-                });
+    <form id="modify" style="display:none">
+        <fieldset style="width:300px">
+            <legend>资料更新</legend>
+            <p>
+                <label for="username">用户名:</label>
+                <input type="text" name="username" id="username">
+            </p>
+            <p>
+                <label for="email">邮&nbsp&nbsp&nbsp&nbsp箱:</label>
+                <input type="text" name="email" id="email">
+            </p>
+            <input type="submit" value="提交" id="submit">
+            <input type="button" value="取消" id="cancle">
+        </fieldset>
+    </form>
+    <!--<script id="myTmpl" type="text/x-jsrender">
+    {{for Data}}
+    <tr>
+    <td>{{:Id}}</td>
+    <td>{{:Name}}</td>
+    <td>{{:Email}}</td>
+</tr>
+{{/for}}
+</script>-->
+<script id="myTmpl" type="text/x-jsrender">
+<tr>
+<td>{{:Id}}</td>
+<td>{{:Name}}</td>
+<td>{{:Email}}</td>
+<td><input type="button"  value="删除"  onclick="rem(this)">
+<input type="button"  value="更新"  onclick="modi(this)"></td>
+</tr>
+</script>
+<script id="myList" type="text/x-jsrender">
+{{for Data tmpl="#myTmpl"/}}
+</script>
+<script type="text/javascript">
+var tmpl=$.templates("#myList");
+var data=null;
+function ajax(last){
+    $.ajax({
+        url:"http://192.168.10.243:8090/v1/user?limit=2&last="+last,
+        type:"GET",
+        dataType:"json",
+        success:function(res){
+            if(res.Data===null||res.Data.length===0){
+                $("#next").css("display","none");
+                return ;
+            }
+            var html=tmpl.render(res);
+            $("#list").html(html);
+            $("#modify").css("display","none");
+        }
+    });
+}
+$(function(){
+     ajax(0);
+    //var markup="<tr><td>${Id}</td><td>${Name}</td><td>${Email}</td></tr>";
+    /*$.ajax({
+        url:"http://192.168.10.243:8090/v1/user?limit=2",
+        //url :"http://192.168.10.243:8090/v1/user?limit=20"
+        type:"GET",
+        dataType:"json",
+        success:function(res){
+            var html=tmpl.render(res);
+            $("#list").html(html);
+            //var con=res.Data;
+            //$.template("conTemplates",markup )
+            //$.tmpl("conTemplates",con).appendTo("#list");
+        }
+    });*/
+});
 
+$("#next").click(function(){
+    var last=$("#list tr:last td:first").html();
+    $("#pre").css("display","inline");
+    ajax(last);
+});
+
+$("#pre").click(function(){
+    var last=$("#list tr:first td:first").html()-3;
+    $("#next").css("display","inline");
+    ajax(last);
+    /*$.ajax({
+        url:"http://192.168.10.243:8090/v1/user?limit=2&last="+number,
+        type:"GET",
+        dataType:"json",
+        success:function(res){
+            var html=tmpl.render(res);
+            $("#list").html(html);
+        }
+    });*/
+});
+
+function rem(obj){
+    var id=obj.parentNode.parentNode.cells[0].innerHTML;
+    var tbody=obj.parentNode.parentNode.parentNode;
+    var last=tbody.rows[0].cells[0].innerHTML-1;
+    $.ajax({
+        url:"http://192.168.10.243:8090/v1/user/"+id,
+        type:"DELETE",
+        success:function(){
+            ajax(last);
+        }
+    });
+}
+
+function modi(obj){
+    $("#modify").css("display","inline");
+    $("input[value='更新']").attr("disabled","disabled");
+    var id=obj.parentNode.parentNode.cells[0].innerHTML;
+    var name=obj.parentNode.parentNode.cells[1].innerHTML;
+    $("#username").val(name);
+    var email=obj.parentNode.parentNode.cells[2].innerHTML;
+    $("#email").val(email);
+    var tbody=obj.parentNode.parentNode.parentNode;
+    var last=tbody.rows[0].cells[0].innerHTML-1;
+    $("#modify").validate({
+        debug: true,
+        rules: {
+            username: {
+                required: true,
+                minlength: 2,
+                maxlength: 10
+            },
+            email:{
+                required:true,
+                email:true
+            }
+        },
+        messages: {
+            username: {
+                required: '请输入用户名',
+                minlength: '用户名不能小于2个字符',
+                maxlength: '用户名不能超过10个字符',
+                remote: '用户名不存在'
+            },
+            email:{
+                required:'请输入邮箱地址',
+                email:'请输入正确的邮箱格式'
+            }
+        },
+        submitHandler:function(){
+            var para={
+                id:0,
+                name:$("#username").val(),
+                email:$("#email").val(),
+                createTs:0,
+                updateTs:0,
+            };
+            var con=JSON.stringify(para);
+            $.ajax({
+                url:"http://192.168.10.243:8090/v1/user/"+id,
+                type:"PUT",
+                contentType:"application/json",
+                data:con,
+                success:function(){
+                    ajax(last);
+                    $("input[value='更新']").removeAttr("disabled");
+                }
             });
-        </script>
-    </body>
+        },
+    });
+}
+$("#cancle").click(function(){
+    $("#modify").css("display","none");
+    $("#username").val("");
+    $("#email").val("");
+    $("input[value='更新']").removeAttr("disabled");
+});
+</script>
+
+</body>
 </html>
