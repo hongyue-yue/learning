@@ -9,7 +9,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr v-for="entry in dataList">
+					<tr v-for="(index,entry) in dataList">
 						<td v-for="col in columns">
 							{{ entry[col.name] }}
 						</td>
@@ -34,10 +34,18 @@ export default{
                       name: 'phone'
                   }],
         dataList:[
-                   {customerId:'0'},
-                   {companyName:'qaz'},
-                   {contactName:'edc'},
-                   {phone:'111-234-456'}
+                   	{
+				   		customerId:'0',
+						companyName:'qaz',
+						contactName:'edc',
+                   		phone:'111-234-456'
+					},
+					{
+					    customerId:'1',
+					    companyName:'wsx',
+					    contactName:'rfv',
+					    phone:'112-245-123'
+					}
                   ]
         }
      }
