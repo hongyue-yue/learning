@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>registerVue</title>
+        <style type="text/css">
+        #userRegister{width: 280px;margin: 0 auto;}
+        .submit{margin-left: 100px}
+        </style>
+    </head>
+    <body>
+        <div id="userRegister">
+            <form >
+                <fieldset>
+                <legend>用户注册</legend>
+                <p>
+                    <label>用&nbsp&nbsp户&nbsp&nbsp名:</label>
+                    <input type="text" v-model="registerData.name">
+                </p>
+                <p>
+                    <label >邮&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp箱:</label>
+                    <input type="text" v-model="registerData.email">
+                </p>
+                <p>
+                    <label >密&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp码:</label>
+                    <input type="password" v-model="registerData.password">
+                </p>
+                <div class="submit" >
+                    <input type="button" value="注册" v-on:click.prevent="register">
+                </div>
+                <div class="submit">
+                    <span>{{msg}}</span>
+                </div>
+                </fieldset>
+            </form>
+        </div>
+        <script src="vendor/vue.js"></script>
+        <script src="vendor/vue-resource.js"></script>
+        <script type="text/javascript">
+          var demo=new Vue({
+              el:"#userRegister",
+              data:{
+                    registerUrl:"http://192.168.10.243:8090/v1/auth/register",
+                    registerData:{
+                        name:"",
+                        email:"",
+                        password:""
+                    },
+                    msg:""
+              },
+              methods:{
+              register:function(){
+                      var con=JSON.stringify(this.registerData);
+                      this.$http.post(this.registerUrl,con)
+                      .then((response)=>{
+                           this.msg="登录成功";
+                      }).catch((response)=>{
+                          var body=JSON.parse(response.body);
+                          this.msg=body.Reason;
+                      });
+                  }
+              }
+          });
+
+        </script>
+
+    </body>
+</html>
