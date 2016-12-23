@@ -80,15 +80,38 @@ Vue.component('treeGrid', {
 	},
 	methods:{
 		itemClick(id,expend) {
-            console.log(id);
+            //console.log(id);
             this.itemId = id;
             this.isExpend = !expend;
          },      
 	},
 })
 Vue.filter('reverse', function (value,itemId, isExpend) {
-  console.log(value,itemId, isExpend);
-  return value;
+   function recursive(obj, newObj, level, itemId, isExpend) {
+        //console.log(obj, newObj, level, itemId, isExpend)
+        obj.forEach(function(o){
+            if(o.children && o.children.length !=0){
+                o.level = level;
+                o.leaf = false;
+                newObj.push(o);
+                if(o.id == itemId) {
+                    o.expend = isExpend;
+                }
+                if(o.expend == true) {
+                    recursive(o.children, newObj, o.level + 1, itemId, isExpend);
+                }
+            } else {
+                o.level = level;
+                o.leaf = true;
+                newObj.push(o);
+                return false;
+            }
+        });
+    }
+    var newObj = [];
+    //console.log(value,itemId, isExpend)
+    recursive(value, newObj, 0, itemId, isExpend);  
+    return newObj;
 })
 var vm=new Vue({
     el:"#app",
