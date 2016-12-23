@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>vuePage</title>
+    <link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+	<script  src="http://cdn.bootcss.com/vue/1.0.18/vue.js"></script>
+    <script type="text/javascript" src="http://cdn.bootcss.com/vue-resource/1.0.0/vue-resource.js"></script>
+	<style type="text/css">
+         html,body{width:100%;height:100%}
+         #app{width:80%;height:60%;}
+		.box {width:100%;height:100%;position:relative;}
+		.boot-select {float: right;width: 80px;}
+		.boot-nav {float: right;}
+        .boot-page {display: inline-block; margin: 2px 10px 0 20px;vertical-align: middle;}
+        .page-total {display: inline-block;vertical-align: middle;}
+       
+        
+       thead,tbody{width:100%;}
+       table{width:100%;border-collapse:separate;border-spacing:1px;position:relative;}
+       th {font-weight: normal;background-color:#5daaca;color:#fff;text-align: center;}
+       td{background-color:#ccc;color:#333}
+       th,td{text-align:center;height:30px;} 
+       .table{width:100%;height:90%;overflow: auto;margin: 0;}
+       .foot{width:100%;background-color:#ccc;position:absolute;bottom:0;height:40px}
+	</style>
+</head>
+<body>
+<div id="app">
+    <page :lists="treeData"></page>
+</div>
+<script type="text/x-template" id="main">
+<div class="box" id="box">
+    <div class="table" id="header">
+        <table >
+        <thead>
+            <tr>
+                <th width="10%" >id</th>
+                <th width="30%" >name</th>
+                <th width="40%" >content</th>
+                <th width="20%" >remark</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="data in tableList">
+                <td v-text="data.num" width="10%"></td>
+                <td v-text="data.author" width="30%"></td>
+                <td v-text="data.contents" width="40%"></td>
+                <td v-text="data.remark" width="20%"></td>
+            </tr>
+        </tbody>
+        </table>
+    </div>
+    <div class="foot" id="foot">
+                    <!--<div class="pull-left">
+                        <button class="btn btn-default" @click="refresh">刷新</button>
+                    </div>-->
+        <div class="pull-right">
+            <boot-page v-ref:page :async="false" :data="lists" :lens="lenArr" :page-len="pageLen" :param="param"></boot-page>
+        </div>
+        <div style="clear:both"></div> 
+    </div>
+
+    <!--<table class="table table-hover table-bordered">
+        <thead>
+            <tr>
+                <th width="10%">id</th>
+                <th width="30%">name</th>
+                <th width="40%">content</th>
+                <th width="20%">remark</th>
+            </tr>
+        </thead>
+
+        <tbody>
+          
+            <tr v-for="data in tableList">
+                <td v-text="data.num"></td>
+                <td v-text="data.author"></td>
+                <td v-text="data.contents"></td>
+                <td v-text="data.remark"></td>
+            </tr>
+        
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="4">
+                    <div class="pull-left">
+                        <button class="btn btn-default" @click="refresh">刷新</button>
+                    </div>
+                    <div class="pull-right">
+                        <boot-page v-ref:page :async="false" :data="lists" :lens="lenArr" :page-len="pageLen" :param="param"></boot-page>
+                    </div>
+                </td>
+            </tr>
+        </tfoot>
+    </table>-->
+</div>
+</script>
+<script type="text/x-template" id="bootpage">
+    <div>
+        <nav class="boot-nav">
+        <ul class="pagination boot-page">
+            <li>
+                <a href="javascript:void(0)" aria-label="Previous" @click="onFirstClick()">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li>
+                <a href="javascript:void(0)" aria-label="Next" @click="onPrevClick()">
+                    <span aria-hidden="true">‹</span>
+                </a>
+            </li>
+            <li v-for="page in pages" :class="activeNum === $index ? 'active' : ''">
+                <a href="javascript:void(0)" v-text="page" @click="onPageClick($index)"></a>
+            </li>
+            <li>
+                <a href="javascript:void(0)" aria-label="Next" @click="onNextClick()">
+                    <span aria-hidden="true">›</span>
+                </a>
+            </li>
+            <li>
+                <a href="javascript:void(0)" aria-label="Next" @click="onLastClick()">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+        <div class="page-total">
+            共 <span v-text="pageTotal"></span> 页
+        </div>
+    </nav>
+    <select class="form-control boot-select" v-model="len">
+        <!--<option v-for="arr in lens" :value="arr" v-text="arr" :selected="$index === 0 ? true : false"></option>-->
+        <option v-for="arr in lens" :value="arr" v-text="arr" ></option>
+    </select>
+ </div>
+</script>
+
+<script type="text/javascript">
+    var lists=[
+                {num: 1, author: 'luozh', contents: 'BootPage是一款支持静态数据和服务器数据的表格分页组件', remark: 'dsds'},
+                {num: 2, author: 'luozh', contents: '支持调整每页显示行数和页码显示个数，样式基于bootstrap', remark: 'dsds'},
+                {num: 3, author: 'luozh', contents: '<boot-page>标签中async指是否从服务器端获取数据，false为否', remark: 'dsds'},
+                {num: 4, author: 'luozh', contents: 'data为静态的表格数据数组；', remark: 'dsds'},
+                {num: 5, author: 'luozh', contents: 'lens为每页显示行数的数组', remark: 'dsds'},
+                {num: 6, author: 'luozh', contents: 'page-len为可显示的页码数', remark: 'dsds'},
+                {num: 7, author: 'luozh', contents: '服务器回传参数为{data:[], page_num: 6}, 其中data为表格数据，page_num为总页数', remark: 'dsds'},
+                {num: 8, author: 'luozh', contents: '可以调用this.$refs.page.refresh()刷新表格数据', remark: 'dsds'},
+                {num: 9, author: 'luozh', contents: 'BootPage是一款支持静态数据和服务器数据的表格分页组件', remark: 'dsds'},
+                {num: 10, author: 'luozh', contents: '支持调整每页显示行数和页码显示个数，样式基于bootstrap', remark: 'dsds'},
+                {num: 11, author: 'luozh', contents: '<boot-page>标签中async指是否从服务器端获取数据，false为否', remark: 'dsds'},
+                {num: 12, author: 'luozh', contents: 'data为静态的表格数据数组；', remark: 'dsds'},
+                {num: 13, author: 'luozh', contents: 'lens为每页显示行数的数组', remark: 'dsds'},
+                {num: 14, author: 'luozh', contents: 'page-len为可显示的页码数', remark: 'dsds'},
+                {num: 15, author: 'luozh', contents: '服务器回传参数为{data:[], page_num: 6}, 其中data为表格数据，page_num为总页数', remark: 'dsds'},
+                {num: 16, author: 'luozh', contents: '可以调用this.$refs.page.refresh()刷新表格数据', remark: 'dsds'},
+                {num: 1, author: 'luozh', contents: 'BootPage是一款支持静态数据和服务器数据的表格分页组件', remark: 'dsds'},
+                {num: 2, author: 'luozh', contents: '支持调整每页显示行数和页码显示个数，样式基于bootstrap', remark: 'dsds'},
+                {num: 3, author: 'luozh', contents: '<boot-page>标签中async指是否从服务器端获取数据，false为否', remark: 'dsds'},
+                {num: 4, author: 'luozh', contents: 'data为静态的表格数据数组；', remark: 'dsds'},
+                {num: 5, author: 'luozh', contents: 'lens为每页显示行数的数组', remark: 'dsds'},
+                {num: 6, author: 'luozh', contents: 'page-len为可显示的页码数', remark: 'dsds'},
+                {num: 7, author: 'luozh', contents: '服务器回传参数为{data:[], page_num: 6}, 其中data为表格数据，page_num为总页数', remark: 'dsds'},
+                {num: 8, author: 'luozh', contents: '可以调用this.$refs.page.refresh()刷新表格数据', remark: 'dsds'},
+                {num: 9, author: 'luozh', contents: 'BootPage是一款支持静态数据和服务器数据的表格分页组件', remark: 'dsds'},
+                {num: 10, author: 'luozh', contents: '支持调整每页显示行数和页码显示个数，样式基于bootstrap', remark: 'dsds'},
+                {num: 11, author: 'luozh', contents: '<boot-page>标签中async指是否从服务器端获取数据，false为否', remark: 'dsds'},
+                {num: 12, author: 'luozh', contents: 'data为静态的表格数据数组；', remark: 'dsds'},
+                {num: 13, author: 'luozh', contents: 'lens为每页显示行数的数组', remark: 'dsds'},
+                {num: 14, author: 'luozh', contents: 'page-len为可显示的页码数', remark: 'dsds'},
+                {num: 15, author: 'luozh', contents: '服务器回传参数为{data:[], page_num: 6}, 其中data为表格数据，page_num为总页数', remark: 'dsds'},
+                {num: 16, author: 'luozh', contents: '可以调用this.$refs.page.refresh()刷新表格数据', remark: 'dsds'}
+            ]; // 表格原始数据
+
+	Vue.component('bootPage', {
+      template: '#bootpage',
+      props: {
+        // 页码
+        pages: {
+            type: Array,
+            default: function () {
+                return [1]
+            }
+        },
+        // 是否请求服务器端数据
+        async: {
+            type: Boolean,
+            default: false
+        },
+        // 每页显示个数
+        len: {
+            type: Number,
+            default: 5
+        },
+        // 显示个数数组
+        lens: {
+            type: Array,
+            default: function () {
+                return [10, 50, 100]
+            }
+        },
+        // 表格数据（数组）
+        data: {
+            type: Array,
+            default: function () {
+                return []
+            }
+        },
+        // AJAX地址
+        url: {
+            type: String,
+            default: ''
+        },
+        // 显示页数
+        pageLen: {
+            type: Number,
+            default: 10
+        },
+        // 总页数 
+        pageTotal: {
+            type: Number,
+            default: 1
+        },
+        // 参数内容
+        param: {
+            type: Object,
+            default: function () {
+                return {}
+            }
+        }
+    },
+    data () {
+        return {
+            activeNum: 0
+        }
+    },
+    methods: {
+        // 点击页码刷新数据
+        onPageClick (index) {
+            this.activeNum = index
+        },
+        // 上一页
+        onPrevClick () {
+            // 当前页是否为当前最小页码
+            if (this.activeNum > 0) {
+                this.activeNum = this.activeNum - 1
+            } else {
+                if (this.pages[0] !== 1) {
+                    let newPages = []
+                    for (let i = 0; i < this.pages.length; i++) {
+                        newPages[i] = this.pages[i] - 1
+                    }
+                    this.pages = newPages
+                    this.getData()
+                }
+            }
+        },
+        // 下一页
+        onNextClick () {
+            // 当前页是否为当前最大页码
+            if (this.activeNum < this.pages.length - 1) {
+                this.activeNum = this.activeNum + 1
+            } else {
+                if (this.pages[this.pages.length - 1] < this.pageTotal) {
+                    let newPages = []
+
+                    for (let i = 0; i < this.pages.length; i++) {
+                        newPages[i] = this.pages[i] + 1
+                    }
+
+                    this.pages = newPages
+
+                    this.getData()
+                }
+            }
+        },
+        // 第一页
+        onFirstClick () {
+            if (this.pages[0] === 1) {
+                this.activeNum = 0
+            } else {
+                let originPage = []
+
+                for (let i = 1; i <= this.pageLen; i++) {
+                    originPage.push(i)
+                }
+
+                this.pages = originPage
+                this.activeNum === 0 ? this.getData() : this.activeNum = 0
+            }
+        },
+        // 最后一页
+        onLastClick () {
+            if (this.pageTotal <= this.pageLen) {
+                this.activeNum = this.pages.length - 1
+            } else {
+                let lastPage = []
+
+                for (let i = this.pageLen - 1; i >= 0; i--) {
+                    lastPage.push(this.pageTotal - i)
+                }
+
+                this.pages = lastPage
+                this.activeNum === this.pages.length - 1 ? this.getData() : this.activeNum = this.pages.length - 1
+            }
+        },
+        // 获取页码
+        getPages () {
+            this.pages = []
+            if (!this.async) {
+                this.pageTotal = Math.ceil(this.data.length / this.len)
+            }
+            // 比较总页码和显示页数
+            if (this.pageTotal <= this.pageLen) {
+                for (let i = 1; i <= this.pageTotal; i++) {
+                    this.pages.push(i)
+                }
+            } else {
+                for (let i = 1; i <= this.pageLen; i++) {
+                    this.pages.push(i)
+                }
+            }
+        },
+        // 页码变化获取数据
+        getData () {
+            if (!this.async) {
+                let len = this.len,
+                    pageNum = this.pages[this.activeNum] - 1,
+                    newData = [];
+                for (let i = pageNum * len; i < (pageNum * len + len); i++) {
+                    this.data[i] !== undefined ? newData.push(this.data[i]) : ''
+                }
+                this.$dispatch('data', newData)
+            } else {
+                this.param.active = this.pages[this.activeNum]
+                this.param.len = this.len
+
+                this.$http({
+                    url: this.url, 
+                    method: 'POST',
+                    data: this.param
+                })
+                .then(function (response) {
+                    this.pageTotal = response.data.page_num
+                    if (this.pages.length !== this.pageLen || this.pageTotal < this.pageLen) {
+                        this.getPages()
+                    }
+                    if (!response.data.data.length) {
+                        this.activeNum = this.pageTotal - 1
+                    }
+                    this.$dispatch('data', response.data.data)
+                })
+            }
+        },
+        // 刷新表格
+        refresh () {
+            this.getData()
+        },
+        // 重置并刷新表格
+        refresh2 () {
+            this.pages = [1]           
+            this.activeNum === 0 ? this.getData() : this.activeNum = 0
+        }
+    },
+    ready () {
+    	//console.log("111");
+        if (!this.async) {
+            this.getPages()
+        } 
+        this.getData()
+    },
+    watch: {
+        // 监听显示数量
+        'len' (newVal, oldVal) {
+            if (!this.async) {
+                this.getPages()
+                if (this.activeNum + 1 > this.pages.length) {
+                    this.activeNum = this.pages.length - 1
+                }
+                this.getData()
+            } else {
+                this.refresh2()
+            }
+        },
+        // 监测当前页变化
+        'activeNum' (newVal, oldVal) {
+            this.getData()
+        }
+    },
+    events: {
+        'refresh::page' () {
+            this.refresh()
+        }
+    }
+    });
+
+Vue.component('page', {
+      template: '#main',
+        props:{
+            lists: {
+              type: Array,
+              default: function () {
+                return []
+               }
+            },
+        },
+	 	data () {
+            return{
+            lenArr: [5,10,20,50,100], // 每页显示长度设置
+            pageLen: 5, // 可显示的分页数
+            // url: '/bootpage/', // 请求路径
+            param: {}, // 传递参数
+            tableList: [] // 分页组件传回的分页后数据 
+           }
+        },
+        ready(){
+        	var boxHei=document.getElementById("box").clientHeight;
+            console.log(boxHei);
+            document.getElementById("header").style.height=boxHei-40+"px";
+        },
+        methods: {
+             refresh () {
+                   this.$refs.page.refresh()
+                    }
+            },
+        events: {
+        // 分页组件传回的表格数据
+             'data' (data) {
+                  this.tableList = data
+            },
+        // 刷新数据
+             'refresh' () {
+                  this.refresh()
+            }
+        }
+	 });
+
+
+var vm=new Vue({
+        el:"#app",
+        data: {
+             treeData:lists
+        },
+})
+</script>
+ 
+</body>
+</html>

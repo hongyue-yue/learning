@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>TQEditor</title>
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<style type="text/css">
+	    html,body{width:60%;height:60%;}
+	    body{height:100%;margin:0;width:100%;}
+	    pre{margin:0;position:relative;}
+	    p{margin: 0;}
+	    .main{width:100%;height:100%;overflow: auto;background-color:#F0EFEF;margin:50px 0 0 50px}
+		.bounced{width:60px;height:30px;position:fixed;z-index:10;border:1px solid #ccc;background-color:#fff;display: none;}
+		.p{width:100%;line-height:30px;text-align:center;font-size:14px; }
+		.p:hover{color:#A1D2EC}
+		/*.text{position:absolute;background-color:#A0C0F7;z-index:10;}*/
+		.wordwrap {white-space: pre-wrap;
+			       white-space: -moz-pre-wrap;
+                   white-space: -pre-wrap;	
+                   white-space: -o-pre-wrap;	
+                   word-wrap: break-word;
+                  }
+        .triangle-down {width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-top:6px solid #A0C0F7;
+        	            position: absolute;left:5px;
+                       }
+        .text{position:absolute;background-color:#A0C0F7;z-index:10;padding:2px;border-radius:3px;color:#fff;text-align:center;min-width:90px;}
+	</style>
+</head>
+<body  oncontextmenu="return false">
+  <div class="main">
+    <div class="bounced" id="bounced">
+    	<div class="p" onclick="notation()" >批注</div>
+    	
+    </div>
+    <pre id="html"></pre>
+  </div>
+
+    <script type="text/javascript">
+    
+    	var data = "<html>\n" +
+           "   <head>\n" +
+           "      <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"><style type=\"text/css\">.b1{white-space-collapsing:preserve;}\n" +
+           "   .b2{margin: 0.7875in 0.7875in 0.7875in 0.7875in;}\n" +
+           "   .s1{font-weight:bold;}\n" +
+           "   .s2{display: inline-block; text-indent: 0; min-width: 0.44444445in;}\n" +
+           "   .s3{background-color:yellow;}\n" +
+           "   .p1{margin-top:0.108333334in;text-align:center;hyphenate:auto;font-family:Times New Roman;font-size:14pt;}\n" +
+           "   .p2{margin-top:0.108333334in;text-align:start;hyphenate:auto;font-family:Times New Roman;font-size:14pt;}\n" +
+           "   .p3{margin-top:0.108333334in;text-align:start;hyphenate:auto;font-family:Times New Roman;font-size:10pt;}\n" +
+           "   .p4{text-align:center;hyphenate:auto;font-family:Times New Roman;font-size:10pt;}\n" +
+           "   .p5{text-indent:0.29166666in;margin-left:0.25in;text-align:start;hyphenate:auto;font-family:Times New Roman;font-size:10pt;}\n" +
+           "   .p6{text-align:start;hyphenate:auto;font-family:Times New Roman;font-size:14pt;}\n" +
+           "   .p7{text-align:justify;hyphenate:auto;font-family:Times New Roman;font-size:10pt;}\n" +
+           "   .p8{text-indent:0.39375in;text-align:justify;hyphenate:auto;font-family:Times New Roman;font-size:10pt;}\n" +
+           "   .p9{text-align:start;hyphenate:auto;font-family:Times New Roman;font-size:10pt;}\n" +
+           "   .td1{width:1.0423611in;padding-start:0.075in;padding-end:0.075in;border-bottom:thin solid black;border-left:thin solid black;border-right:thin solid black;border-top:thin solid black;}\n" +
+           "   .td2{width:5.64375in;padding-start:0.075in;padding-end:0.075in;border-bottom:thin solid black;border-left:thin solid black;border-right:thin solid black;border-top:thin solid black;}\n" +
+           "   .r1{height:0.33472222in;keep-together:always;}\n" +
+           "   .r2{height:0.5784722in;keep-together:always;}\n" +
+           "   .r3{height:0.97986114in;keep-together:always;}\n" +
+           "   .r4{height:0.97430557in;keep-together:always;}\n" +
+           "   .r5{height:0.59444445in;keep-together:always;}\n" +
+           "   .r6{height:1.1645833in;keep-together:always;}\n" +
+           "   .r7{height:0.7861111in;keep-together:always;}\n" +
+           "   .t1{table-layout:fixed;border-collapse:collapse;border-spacing:0;}\n" +
+           "</style><meta content=\"Jerry\" name=\"author\">\n" +
+           "   </head>\n" +
+           "   <body class=\"b1 b2\">\n" +
+           "      <p class=\"p1\"><span class=\"s1\">Q2产品2016年第三季度升级说明</span><a name=\"_GoBack\"></a><a name=\"_GoBack\"></a></p>\n" +
+           "      <p class=\"p2\"><span class=\"s1\">概况</span></p>\n" +
+           "      <p class=\"p3\"><span>在奇境公司已经有Q2工程协同应用系统的基础上，根据上海市政设计院提出的需求，以及第三季度房地产开发商、项目管理公司主要客户提出的相关意见。主要升级内容如下：</span></p>\n" +
+           "      <p class=\"p3\"></p>\n" +
+           "      <table class=\"t1\">\n" +
+           "         <tbody>\n" +
+           "            <tr class=\"r1\">\n" +
+           "               <td class=\"td1\">\n" +
+           "                  <p class=\"p4\"><span>模块</span></p>\n" +
+           "               </td>\n" +
+           "               <td class=\"td2\">\n" +
+           "                  <p class=\"p4\"><span>开发内容</span></p>\n" +
+           "               </td>\n" +
+           "            </tr>\n" +
+           "            <tr class=\"r2\">\n" +
+           "               <td class=\"td1\">\n" +
+           "                  <p class=\"p4\"><span>【配置中心】群组管理升级</span></p>\n" +
+           "               </td>\n" +
+           "               <td class=\"td2\">\n" +
+           "                  <p class=\"p5\"><span class=\"s2\">\uF06C\u200B&nbsp;</span><span class=\"s3\">默认预置“质量验收”、“质量检查”、“安全验收”、“安全检查”四个群组</span></p>\n" +
+           "               </td>\n" +
+           "            </tr>\n" +
+           "            <tr class=\"r2\">\n" +
+           "               <td class=\"td1\">\n" +
+           "                  <p class=\"p4\"><span>【文档管理】</span></p>\n" +
+           "                  <p class=\"p4\"><span>升级</span></p>\n" +
+           "               </td>\n" +
+           "               <td class=\"td2\">\n" +
+           "                  <p class=\"p5\"><span class=\"s2\">\uF06C\u200B&nbsp;</span><span>新增“最近文档”二级页签，配套移动端</span></p>\n" +
+           "                  <p class=\"p5\"><span class=\"s2\">\uF06C\u200B&nbsp;</span><span>原文档目录改为“工程云盘”二级页签，为每个群组自动创建预置的文件夹目录</span></p>\n" +
+           "                  <p class=\"p5\"><span class=\"s2\">\uF06C\u200B&nbsp;</span><span>新增“已经分享”二级页签，新增通过URL地址直接访问文件夹和文档的功能</span></p>\n" +
+           "               </td>\n" +
+           "            </tr>\n" +
+           "            <tr class=\"r3\">\n" +
+           "               <td class=\"td1\">\n" +
+           "                  <p class=\"p4\"><span>【进度计划】升级</span></p>\n" +
+           "               </td>\n" +
+           "               <td class=\"td2\">\n" +
+           "                  <p class=\"p5\"><span class=\"s2\">\uF06C\u200B&nbsp;</span><span>增加资源计划编制功能，可以定义资源类型和计量单位，编辑和展示资源曲线</span></p>\n" +
+           "                  <p class=\"p5\"><span class=\"s2\">\uF06C\u200B&nbsp;</span><span>增加给任务分配资源的功能，通过指定时间段查询资源总量功能</span></p>\n" +
+           "                  <p class=\"p5\"><span class=\"s2\">\uF06C\u200B&nbsp;</span><span>优化任务计划开始，结束提醒功能，增加资源计划定时通知功能</span></p>\n" +
+           "                  <p class=\"p5\"><span class=\"s2\">\uF06C\u200B&nbsp;</span><span>将“配置”页面从工程任务页面独立出来作为“更多设置”二级页面</span></p>\n" +
+           "               </td>\n" +
+           "            </tr>\n" +
+           "            <tr class=\"r3\">\n" +
+           "               <td class=\"td1\">\n" +
+           "                  <p class=\"p4\"><span>【施工现场】</span></p>\n" +
+           "                  <p class=\"p4\"><span>升级改名</span></p>\n" +
+           "                  <p class=\"p4\"><span>【物资采购】</span></p>\n" +
+           "               </td>\n" +
+           "               <td class=\"td2\">\n" +
+           "                  <p class=\"p5\"><span class=\"s2\">\uF06C\u200B&nbsp;</span><span>原“联系单”更名为“现场发文”二级子页签，功能不变</span></p>\n" +
+           "                  <p class=\"p5\"><span class=\"s2\">\uF06C\u200B&nbsp;</span><span>新增“产品管理”功能，录入供货商、产品名称、品牌规格参数、价格信息</span></p>\n" +
+           "                  <p class=\"p5\"><span class=\"s2\">\uF06C\u200B&nbsp;</span><span>“订货单”改为“定货管理”二级页签</span></p>\n" +
+           "                  <p class=\"p5\"><span class=\"s2\">\uF06C\u200B&nbsp;</span><span>“跟踪单”改为“采购跟踪”，简化模块编辑功能，新增订货单关联任务功能 </span></p>\n" +
+           "                  <p class=\"p5\"><span class=\"s2\">\uF06C\u200B&nbsp;</span><span>增加“发货管理”二级页签，调整打印二维码和新增确认发货功能</span></p>\n" +
+           "                  <p class=\"p5\"><span class=\"s2\">\uF06C\u200B&nbsp;</span><span>“签收单”调整更名为“检查签收”二级页签，增加抽样检查功能</span></p>\n" +
+           "                  <p class=\"p5\"><span class=\"s2\">\uF06C\u200B&nbsp;</span><span>暂时隐藏“验收单”和“付款单”功能</span></p>\n" +
+           "               </td>\n" +
+           "            </tr>\n" +
+           "            <tr class=\"r4\">\n" +
+           "               <td class=\"td1\">\n" +
+           "                  <p class=\"p4\"><span>【设计协调】升级改名</span></p>\n" +
+           "                  <p class=\"p4\"><span>【质量管理】</span></p>\n" +
+           "               </td>\n" +
+           "               <td class=\"td2\">\n" +
+           "                  <p class=\"p5\"><span class=\"s2\">\uF06C\u200B&nbsp;</span><span>原设计协调讨论区改为“设计协调”二级页面，新增解决流程和常用短语功能</span></p>\n" +
+           "                  <p class=\"p5\"><span class=\"s2\">\uF06C\u200B&nbsp;</span><span>新增“质量验收”二级页面，主题有“待验收、缺内容、未通过、已通过”状态</span></p>\n" +
+           "                  <p class=\"p5\"><span class=\"s2\">\uF06C\u200B&nbsp;</span><span>新增“质量检查”二级页面，主题有“待回应、待检查、已撤回、已整改”状态</span></p>\n" +
+           "                  <p class=\"p5\"><span class=\"s2\">\uF06C\u200B&nbsp;</span><span>修改文档附件上传功能、通过浏览按钮将本地计算机内的文件上传到确定文件夹</span></p>\n" +
+           "               </td>\n" +
+           "            </tr>\n" +
+           
+           "   </body>\n" +
+           "</html>";
+
+    $("#html").html(data);
+
+
+    var text,node,inHtml,selectText;
+    $("#html").mouseup(function (event) {
+    	   $("#bounced").hide();
+	       var event=event||window.event;	    
+           if(event.button==0&&window.getSelection().toString().length>1){
+                 text = window.getSelection();
+                 node=text.anchorNode.parentNode;
+                 //node=event.srcElement || event.target;
+                 
+                // console.log(text)
+            }else if(event.button==2&&text.toString().length>1){
+            	selectText = text.toString();
+                var selectedText = "</span><span style='background:red' data-text="+selectText+">"+selectText+"</span><span>"; 
+                var start = text.anchorOffset; 
+                var end = text.focusOffset;
+                var html=$(node).html();
+               //console.log(html);
+                if(start<end) {
+                	var tempStr1 = html.substring(0,start); 
+                    var tempStr2 = html.substring(end);
+                }else{
+                	var tempStr1 = html.substring(0,end); 
+                    var tempStr2 = html.substring(start);
+                }
+                inHtml=tempStr1 + selectedText + tempStr2 ; 
+                $("#bounced").css({
+                	"top":event.clientY+10,
+                	"left":event.clientX,
+                })
+                $("#bounced").show();
+            }
+			});
+	function notation(){
+		$("#bounced").hide();
+		var name=prompt("请输入批注");	
+		if (name!=null && name!=""){
+			 $(node).html(inHtml);
+			 var mainTop=$(".main").offset().top;
+			 var mainLeft=$(".main").offset().left;
+			 var offsetTop=$("[data-text='"+selectText+"']").offset().top;
+			 var offsetLeft=$("[data-text='"+selectText+"']").offset().left;
+             var scrollTop=$(".main").scrollTop();
+             var scrollLeft=$(".main").scrollLeft();
+             var top=offsetTop+scrollTop-mainTop-5;
+             var left=offsetLeft+scrollLeft-mainLeft;
+             var width=$("[data-text='"+selectText+"']").outerWidth()-5;
+			 //console.log(offsetTop,offsetLeft,scrollTop,scrollLeft);
+			 $("<div class='text wordwrap' title="+selectText+" style='top:"+top+"px;width:"+width+"px;left:"+left+"px;'><p>"+name+"</p><span class='triangle-down'></span></div>").appendTo("pre");
+             var height=$("[title='"+selectText+"']").outerHeight();
+			 $("[title='"+selectText+"']").css({"margin-top":-height});	   
+		}else{
+			inHtml="";
+            selectText="";
+		}
+	}
+	$("span").mouseover(function(event){
+		var span=event.srcElement || event.target;
+		var dataText=$(span).attr("data-text");
+		//console.log(dataText);
+		if(dataText){
+			$("[title="+dataText+"]").show();
+		}
+	});
+	$("span").mouseout(function(event){
+        var span=event.srcElement || event.target;
+		var dataText=$(span).attr("data-text");
+		//console.log(dataText);
+		if(dataText){
+			$("[title="+dataText+"]").hide();
+		}
+	});
+ 
+
+ 
+    </script>
+</body>
+</html>
