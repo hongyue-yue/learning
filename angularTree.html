@@ -7,7 +7,7 @@
 	<script type="text/javascript" src="http://cdn.bootcss.com/angular.js/1.6.0/angular.js"></script>
 </head>
 <body>
-   <div ng-app="app">  
+   <div ng-app="app">
    <div ng-controller="treeController" class="container">
        <div class="row">
            <h2>ng-repeat tree grid example</h2>
@@ -19,6 +19,9 @@
                         <td>score</td>
                         <td>city</td>
                         <td>birthday</td>
+                        <td>leaf</td>
+                        <td>expend</td>
+                        <td>level</td>
                     </tr>
                 </thead>
                 <tbody>
@@ -35,12 +38,15 @@
                         <td>{{item.score}}</td>
                         <td>{{item.city}}</td>
                         <td>{{item.birthday}}</td>
+                        <td>{{item.leaf}}</td>
+                        <td>{{item.expend}}</td>
+                        <td>{{item.level}}<td>
                     </tr>
                 </tbody>
            </table>
        </div>
    </div>
-    
+
     <script type="text/javascript">
     	angular.module('app', []).controller('treeController', function($scope){
     $scope.tree = [
@@ -64,7 +70,7 @@
         }
     ];
 
-    $scope.itemId = 1;
+    $scope.itemId = 0;
     $scope.isExpend = true;
 
     $scope.itemClick = function (id, expend) {
@@ -99,7 +105,8 @@
         var newObj = [];
         //console.log(obj)
         recursive(obj, newObj, 0, itemId, isExpend);
-        console.log(newObj)
+
+        console.log(newObj);
         return newObj;
     }
 });

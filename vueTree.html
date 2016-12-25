@@ -5,44 +5,48 @@
 	<title>vueTree</title>
 	<link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
 	<script type="text/javascript" src="http://cdn.bootcss.com/vue/1.0.18/vue.js"></script>
-	<script type="text/javascript" src="http://cdn.bootcss.com/lodash.js/4.9.0/lodash.min.js"></script>
+	
 </head>
 <body>
 <div id="app">
    <tree-grid :items="data"></tree-grid>
 </div>
 <script type="text/x-template" id="table">
-	<table class="table table-striped">
-                <thead>
-                    <tr>
-                        <td>ID</td>
-                        <td>Name</td>
-                        <td>score</td>
-                        <td>city</td>
-                        <td>birthday</td>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="item in items|reverse itemId isExpend ">
-                        <td>
-                            <span style="padding-left: {{item.level * 30}}px;">
-                                <span class="glyphicon" v-on:click="itemClick(item.id, item.expend)"
-                                  v-bind:class="{'glyphicon-minus': !item.leaf && item.expend, 'glyphicon-plus': !item.leaf && !item.expend, 'glyphicon-leaf': item.leaf}">
-                                </span>
-                                {{item.id}}
-                            </span>
-                        </td>
-                        <td>{{item.name}}</td>
-                        <td>{{item.score}}</td>
-                        <td>{{item.city}}</td>
-                        <td>{{item.birthday}}</td>
-                    </tr>
-                </tbody>
-           </table>
+<table class="table table-striped">
+    <thead>
+      <tr>
+        <td>ID</td>
+        <td>Name</td>
+        <td>score</td>
+        <td>city</td>
+        <td>birthday</td>
+        <td>leaf</td>
+        <td>expend</td>
+        <td>level<td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="item in items|reverse itemId isExpend ">
+        <td>
+            <span  style="padding-left: {{item.level * 30}}px;" v-on:click="itemClick(item.id, item.expend)">
+            <span class="glyphicon"  v-bind:class="{'glyphicon-minus': !item.leaf && item.expend, 'glyphicon-plus': !item.leaf && !item.expend, 'glyphicon-leaf': item.leaf}">
+            </span>
+            {{item.id}}
+            </span>
+        </td>
+        <td>{{item.name}}</td>
+        <td>{{item.score}}</td>
+        <td>{{item.city}}</td>
+        <td>{{item.birthday}}</td>
+        <td>{{item.leaf}}</td>
+        <td>{{item.expend}}</td>
+        <td>{{item.level}}</td>
+      </tr>
+    </tbody>
+</table>
 </script>
 <script type="text/javascript">
 //| filterTreeItem 'itemId' 'isExpend'
-
 var data= [{ id: 1, name: 'John', score: 130, city: 'New York', birthday: '1980/2/5',
             children:[
                 { id: 6, name: 'John2', score: 82, city: 'San Fran1', birthday: '1990/1/21'},
@@ -60,6 +64,8 @@ var data= [{ id: 1, name: 'John', score: 130, city: 'New York', birthday: '1980/
                 { id: 11, name: 'Tom3', score: 83, city: 'San Francisco', birthday: '1990/1/21'}
             ]}
           ];
+
+
 Vue.component('treeGrid', {
     template: '#table',
     props:{
@@ -68,55 +74,80 @@ Vue.component('treeGrid', {
               default: function () {
                 return []
                }
-            },	
+            },
 		},
 	data(){
 		return{
-          itemId:1,
+          itemId:0,
           isExpend:true,
+
 		}
 	},
-	ready:function(){		
+	ready:function(){
 	},
 	methods:{
 		itemClick(id,expend) {
-            //console.log(id);
             this.itemId = id;
             this.isExpend = !expend;
-         },      
+         },
 	},
+});
+
+Vue.filter('reverse', function (obj, itemId, isExpend) {
+  function recursive(obj, newObj, level, itemId, isExpend) {
+       //console.log(obj, newObj, level, itemId, isExpend)
+       obj.forEach(function(o){
+           if(o.children && o.children.length !=0){
+               o.level = level;
+               o.leaf = false;
+               newObj.push(o);
+               if(o.id == itemId) {
+                   o.expend = isExpend;
+               }
+               if(o.expend == true) {
+                   recursive(o.children, newObj, o.level + 1, itemId, isExpend);
+               }
+           } else {
+               o.level = level;
+               o.leaf = true;
+
+               newObj.push(o);
+               return false;
+           }
+       });
+   }
+
+
+
+       var newObj = [];
+       //console.log(obj)
+       recursive(obj, newObj, 0, itemId, isExpend);
+       console.log(newObj)
+       return newObj;
+
+
 })
-Vue.filter('reverse', function (value,itemId, isExpend) {
-   function recursive(obj, newObj, level, itemId, isExpend) {
-        //console.log(obj, newObj, level, itemId, isExpend)
-        obj.forEach(function(o){
-            if(o.children && o.children.length !=0){
-                o.level = level;
-                o.leaf = false;
-                newObj.push(o);
-                if(o.id == itemId) {
-                    o.expend = isExpend;
-                }
-                if(o.expend == true) {
-                    recursive(o.children, newObj, o.level + 1, itemId, isExpend);
-                }
-            } else {
-                o.level = level;
-                o.leaf = true;
-                newObj.push(o);
-                return false;
-            }
-        });
-    }
-    var newObj = [];
-    //console.log(value,itemId, isExpend)
-    recursive(value, newObj, 0, itemId, isExpend);  
-    return newObj;
-})
+function expend(data){
+      var data=data;
+      data.forEach(function(o){
+           if(o.children && o.children.length !=0){
+               o.expend=false;
+               expend(o.children);
+           }
+      })
+     return data;
+}
 var vm=new Vue({
     el:"#app",
     data: {
-        data:data,
+        data:[],
+    },
+    ready:function(){
+      this.data=expend(data)
+      console.log(this.data);
+    },
+    methods:{
+
     },
 });
 </script>
