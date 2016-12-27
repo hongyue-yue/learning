@@ -10,11 +10,9 @@
          #app{width:80%;height:60%;}
 		.box {width:100%;height:100%;position:relative;}
 		.boot-select {float: right;width: 80px;}
-		.boot-nav {float: right;}
+		.boot-nav {float: right;margin-right:20px;}
         .boot-page {display: inline-block; margin: 2px 10px 0 20px;vertical-align: middle;}
         .page-total {display: inline-block;vertical-align: middle;}
-       
-        
        thead,tbody{width:100%;}
        table{width:100%;border-collapse:separate;border-spacing:1px;position:relative;}
        th {font-weight: normal;background-color:#5daaca;color:#fff;text-align: center;}
@@ -42,7 +40,7 @@
                 <th width="12.5%">birthday</th>
                 <th width="12.5%">leaf</th>
                 <th width="12.5%">expend</th>
-                <th width="12.5%">level<th>
+                <th width="12.5%">level</th>
             </tr>
         </thead>
         <tbody>
@@ -352,7 +350,7 @@
                }
             },
         },
-	 	data:function(){
+	 	    data:function(){
             return{
             lenArr: [5,10,20,50,100], // 每页显示长度设置
             pageLen: 5, // 可显示的分页数
@@ -376,7 +374,38 @@
                    this.itemId = id;
                    this.isExpend = !expend;
                 },
-            },
+        },
+        filters:{
+             reverse:function(obj, itemId, isExpend){
+                    function recursive(obj, newObj, level, itemId, isExpend) {
+                        //console.log(obj, newObj, level, itemId, isExpend)
+                               obj.forEach(function(o){
+                             if(o.children && o.children.length !=0){
+                                o.level = level;
+                                o.leaf = false;
+                                newObj.push(o);
+                                if(o.id == itemId) {
+                                    o.expend = isExpend;
+                                }
+                                if(o.expend == true) {
+                                    recursive(o.children, newObj, o.level + 1, itemId, isExpend);
+                                }
+                             }                  else {
+                                o.level = level;
+                                o.leaf = true;
+
+                                newObj.push(o);
+                                return false;
+                             }
+                         });
+                       }
+                    var newObj = [];
+                    //console.log(obj)
+                    recursive(obj, newObj, 0, itemId, isExpend);
+                    //console.log(newObj)
+                    return newObj;
+             }
+        },
         events: {
         // 分页组件传回的表格数据
              'data':function (data) {
@@ -391,7 +420,7 @@
 	 });
 
 
-Vue.filter('reverse', function (obj, itemId, isExpend) {
+/*Vue.filter('reverse', function (obj, itemId, isExpend) {
         function recursive(obj, newObj, level, itemId, isExpend) {
        //console.log(obj, newObj, level, itemId, isExpend)
           obj.forEach(function(o){
@@ -420,7 +449,7 @@ Vue.filter('reverse', function (obj, itemId, isExpend) {
        //console.log(newObj)
        return newObj;
 
-    })
+    })*/
 </script>
 
 <script type="text/javascript">
@@ -444,7 +473,7 @@ Vue.filter('reverse', function (obj, itemId, isExpend) {
             children:[
                 { id: 15, name: 'John2', score: 82, city: 'San Fran1', birthday: '1990/1/21'},
                 { id: 16, name: 'John2', score: 81, city: 'San Fran2', birthday: '1990/1/22',
-                    children:[{ id: 8, name: 'John3', score: 89, city: 'San Francisco', birthday: '1990/1/21'}]
+                    children:[{ id: 17, name: 'John3', score: 89, city: 'San Francisco', birthday: '1990/1/21'}]
                 }
             ]},
            { id: 7, name: 'Alice', score: 123, city: 'Washington', birthday: '1984/3/7'},
@@ -452,9 +481,9 @@ Vue.filter('reverse', function (obj, itemId, isExpend) {
            { id: 9, name: 'Mike', score: 100, city: 'London', birthday: '1988/8/12'},
            { id: 10, name: 'Tom', score: 89, city: 'San Francisco', birthday: '1990/1/21',
             children: [
-                { id: 17, name: 'Tom1', score: 77, city: 'San Francisco', birthday: '1990/1/21'},
-                { id: 18, name: 'Tom2', score: 85, city: 'San Francisco', birthday: '1990/1/21'},
-                { id: 19, name: 'Tom3', score: 83, city: 'San Francisco', birthday: '1990/1/21'}
+                { id: 18, name: 'Tom1', score: 77, city: 'San Francisco', birthday: '1990/1/21'},
+                { id: 19, name: 'Tom2', score: 85, city: 'San Francisco', birthday: '1990/1/21'},
+                { id: 20, name: 'Tom3', score: 83, city: 'San Francisco', birthday: '1990/1/21'}
             ]}
           ];
     function expend(data){
@@ -468,14 +497,13 @@ Vue.filter('reverse', function (obj, itemId, isExpend) {
      return data;
     }
 
-
-    data=expend(data);
-
-
    var vm=new Vue({
         el:"#app",
         data: {
-             treeData:data
+             treeData:[],
+        },
+        created:function(){
+            this.treeData=expend(data);
         },
    })
 
