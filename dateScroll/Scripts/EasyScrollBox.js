@@ -1,18 +1,19 @@
 ﻿/*
-* 作者:chenhongjin
-* 2016/10/17
-* http://www.cnblogs.com/easywebfactory
+* 
+* 
+* 
 */
 
 (function ($) {
     function EasyScrollBox(target, param) {
-        //console.log(target)
+       // console.log(target)
+       // console.log(param)
+        this.defaults={}
         var _this = this;
         $.each(param, function (options, value) {
             _this.defaults[options] = value;
         });
-    }
-
+    }        
     EasyScrollBox.prototype.defaults = {
         fontSize: 16,
         fontFamily: '',
@@ -28,6 +29,7 @@
 
     EasyScrollBox.prototype.buildHtml = function (target) {
         var mheight, mwidth, theight, bheight, iheight;
+        
         iheight = parseInt(this.defaults.fontSize * this.defaults.lineHeight);
         theight = iheight * this.defaults.spaceRows;
         bheight = theight;
@@ -39,12 +41,12 @@
         var selectedIndex = 0;
         var isFindDefault = false;
         var fontStyle = "";
-        //console.log(target.selector);
+       
 
         var id=target.selector;
         var ida=id+"-scroller";
         var idul=id+"-ul";
-        console.log(id,ida,idul);
+        
         if (this.defaults.fontFamily.length > 1) {
             fontStyle += "font-family:" + this.defaults.fontFamily + ";";
         }
@@ -53,7 +55,7 @@
         }
 
         var _body = '<div style="width:100%;height:' + mheight + 'px;overflow:hidden;">';
-        _body += '<div id='+ida+' style="width:100%;height:' + mheight + 'px;padding-right:20px; -webkit-box-sizing: content-box;-moz-box-sizing: content-box;box-sizing: content-box;display:block;overflow:scroll;overflow-x: hidden;z-index:2">';
+        _body += '<div id='+ida+' class="scrolldiv" style="width:100%;height:' + mheight + 'px;padding-right:20px; -webkit-box-sizing: content-box;-moz-box-sizing: content-box;box-sizing: content-box;display:block;overflow:scroll;overflow-x: hidden;z-index:2">';
         _body += '<ul id='+idul+' style=" margin-top:' + theight + 'px; margin-bottom:' + bheight + 'px;padding: 0px; width: 100%;z-index:1;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;">';
         var _text = "";
         var _value = "";
@@ -88,6 +90,7 @@
         var v = 0;
         var prev = 0;
         var _this = this;
+       
         var _hasSetDefault=false;
         var _setDefaultVal = setInterval(function () {
             if (lis.length > 0 && _hasSetDefault==false) {
@@ -97,9 +100,9 @@
                 if (selectedIndex >= lis.length) {
                     selectedIndex = 0;
                 }
-                _this.defaults.onSelected(selectedIndex, _this.defaults.data[selectedIndex]);
+                //_this.defaults.onSelected(selectedIndex, _this.defaults.data[selectedIndex]);
             }
-        }, 100);
+        }, 50);
 
 
         var _start = 0;
@@ -131,7 +134,7 @@
                 if (prev > v) {
                     s.scrollTop -= 1;
                 } else {
-                    s.scrollTop += 1;
+                    s.scrollTop += 1.5;
                 }
             }
             prev = v;
