@@ -3,14 +3,14 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<title>TQEditor</title>
-	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="http://cdn.bootcss.com/jquery/1.12.0/jquery.min.js"></script>
 	<style type="text/css">
 	    html,body{width:60%;height:60%;}
 	    body{height:100%;margin:0;width:100%;}
 	    pre{margin:0;position:relative;}
 	    p{margin: 0;}
 	    .main{width:100%;height:100%;overflow: auto;background-color:#F0EFEF;margin:50px 0 0 50px}
-		.bounced{width:60px;height:30px;position:fixed;z-index:10;border:1px solid #ccc;background-color:#fff;display: none;}
+		.bounced{width:60px;height:60px;position:fixed;z-index:10;border:1px solid #ccc;background-color:#fff;display: none;}
 		.p{width:100%;line-height:30px;text-align:center;font-size:14px; }
 		.p:hover{color:#A1D2EC}
 		/*.text{position:absolute;background-color:#A0C0F7;z-index:10;}*/
@@ -29,14 +29,12 @@
 <body  oncontextmenu="return false">
   <div class="main">
     <div class="bounced" id="bounced">
-    	<div class="p" onclick="notation()" >批注</div>
-    	
+    	<div class="p" onclick="notation()">批注</div>
+      <div class="p" onmousedown="copy()">复制</div>
     </div>
     <pre id="html"></pre>
   </div>
-
     <script type="text/javascript">
-    
     	var data = "<html>\n" +
            "   <head>\n" +
            "      <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"><style type=\"text/css\">.b1{white-space-collapsing:preserve;}\n" +
@@ -157,6 +155,7 @@
                 // console.log(text)
             }else if(event.button==2&&text.toString().length>1){
             	selectText = text.toString();
+              console.log(text)
                 var selectedText = "</span><span style='background:red' data-text="+selectText+">"+selectText+"</span><span>"; 
                 var start = text.anchorOffset; 
                 var end = text.focusOffset;
@@ -177,6 +176,11 @@
                 $("#bounced").show();
             }
 			});
+  function copy(){
+       //console.log(text);
+       //$("#copy").select();
+       document.execCommand("Copy");
+  }
 	function notation(){
 		$("#bounced").hide();
 		var name=prompt("请输入批注");	
@@ -222,3 +226,5 @@
     </script>
 </body>
 </html>
+
+
