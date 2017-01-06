@@ -1,0 +1,83 @@
+﻿<!DOCTYPE html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>前端特效网--jquery特效,css群:242140685,jquery视频教程,js touch触屏特效</title>
+<!--<link rel="stylesheet" type="text/css" href="css/163css.css"/>-->
+<script src="http://cdn.bootcss.com/jquery/1.12.0/jquery.js"></script>
+<script src="js/jquery.percentageloader-0.1.js"></script>
+<!--<script src="../progress.js-master/progress.js-master/progress.js"></script>-->
+  </head>
+  <body>
+    <div class="box-163css">
+      <div id="topLoader"></div>
+      <button id="animateButton">旋转</button>
+       <script>
+        $(function() {
+          var $topLoader = $("#topLoader").percentageLoader({width: 240, height: 60,shape:3,value:"",progress : 0, onProgressUpdate : function(val) {
+              $topLoader.setValue(Math.round(val * 100.0));
+            }});
+
+          var topLoaderRunning = false;
+          $("#animateButton").click(function() {
+            if (topLoaderRunning) {
+              return;
+            }
+            topLoaderRunning = true;
+            $topLoader.setProgress(0);
+            //$topLoader.setValue('0kb');
+            var kb = 0;
+            var totalKb = 999;
+            var time;
+            var animateFunc = function() {
+              kb += 10;
+              $topLoader.setProgress(kb / totalKb);
+              //$topLoader.setValue(kb.toString() + 'kb');
+              
+              if (kb < totalKb) {
+                setTimeout(animateFunc, 100);
+              } else {
+                topLoaderRunning = false;
+               // $topLoader.setProgress(0);
+                //$topLoader.setValue('0kb');
+              }
+            }
+            /*var animateFunc=function(){
+              kb+=0.01;
+              $topLoader.setProgress(kb)
+              if (kb <=0.5) {
+                setTimeout(animateFunc, 100);
+              }else if (0.5<kb<=1) {
+                setTimeout(animateFunc, 10);
+               // $topLoader.setProgress(0);
+              }else{
+                topLoaderRunning = false;
+              }
+            }*/
+
+            setTimeout(animateFunc, 25);
+            
+         /* function animate(){
+              kb+=0.01;
+              $topLoader.setProgress(kb);
+              if(0.5<kb&&kb<=1){
+                //console.log(kb)
+                clearInterval(time);
+                time=setInterval(animate,50);
+              }else if(kb>1){
+                clearInterval(time);
+                kb=0;
+                //$topLoader.setProgress(kb);
+                //topLoaderRunning = false;
+              }
+          }
+
+          time=setInterval(animate,100)*/
+
+          });
+        });      
+      </script>
+    </div>
+	  
+</div>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>customProgress2</title>
+	<script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script type="text/javascript" src="../../js/divresize.js"></script>
+	<style type="text/css">
+		.wrap{width:300px;height:300px;margin:50px 0 0 50px;}
+		.progressbar{width:200px;height:20px;margin:20px auto;
+			         border:1px solid blue;border-radius:4px;position:relative;         
+		}
+		.progress{width:0;height:100%;border-radius:4px;background-color:#7052F9;display:block;}
+		.text{position:absolute;top:0;left:45%;width:28px;height:100%;color:#5bd8ff ;animation: meter 5s infinite;animation-direction:alternate;}
+		@keyframes meter {
+           0% {color: #5bd8ff;}
+           50%{color:#8A19E5;}
+          100% {color: #ff0000;}
+        }
+	</style>
+</head>
+<body>
+   <div class="wrap">
+   	   <div class="progressbar">
+   	   	 <span class="progress"></span>
+   	   	 <span class="text">0</span>
+   	   </div>
+   	   <button onclick="runPro()">run</button>
+   </div>
+   <script type="text/javascript">
+     var present,pre,time;
+     var proWidth=$(".progress").width();
+     var barWidth=$(".progressbar").width(); 
+   	function run(w,d){
+   	 	$(".progress").animate({
+   	 		width:w,
+   	 		backgroundColor:'#5ADB31',
+   	 	},d,'linear')
+   	 }
+     function runPro(){
+        run('50%',5000);
+        setTimeout(function(){
+           $(".progress").queue("fx", []);
+           $(".progress").stop();
+           run('100%',2000);
+        },4000)
+       
+     }
+     /*function runProgress(){
+         proWidth++;
+         $(".progress").css("width",proWidth);
+         present=Math.floor(proWidth/barWidth*100);
+   	 	 $(".text").html(present+"%");
+         if(present>=100){
+            clearInterval(time);
+         }
+     }
+     time=setInterval(runProgress,50);*/
+
+   	 $(".progress").resize(function(){
+   	 	 barWidth=$(".progressbar").width();
+   	 	 proWidth=$(".progress").width();
+   	     present=Math.round(proWidth/barWidth*100);
+   	 	$(".text").html(present+"%");
+   	 })
+   </script>
+</body>
+</html>
