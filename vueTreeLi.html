@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	  <title>vueTreeLi</title>\
+    <link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <script type="text/javascript" src="http://cdn.bootcss.com/vue/1.0.18/vue.js"></script>
+    <style type="text/css">
+    	ul,li{list-style-type:none;}
+    	.item {cursor: pointer;}
+      .bold {font-weight: bold;}
+      ul {padding-left:1em;line-height: 1.5em;}
+    </style>
+</head>
+<body>
+   <div >
+   	   <ul id="demo">
+          <item  class="item" :models="treeData"></item>
+       </ul>
+   </div>
+   <template id="item-template">
+   	  <li v-for="model in models">
+        <div :class="{'bold':model.children}"  @click="model.isFolder=!model.isFolder" >
+           <span class="glyphicon"  v-bind:class="{'glyphicon-minus': !model.leaf && model.isFolder, 'glyphicon-plus': !model.leaf && !model.isFolder, 'glyphicon-leaf': model.leaf}">
+            </span>         
+          {{model.name}}
+          <!--<span v-if="model.children">[{{model.isFolder ? '-' : '+'}}]</span>-->
+        </div>
+        <ul v-if="model.isFolder" >
+          <item  class="item" :models="model.children"></item>
+        </ul>
+      </li>
+   </template>
+
+   <script type="text/javascript">
+   	  var data =[ {name: 'My Tree1',
+                                    children: [{ name: 'hello' },
+                                               { name: 'wat' },
+                                               {name: 'child folder',
+                                                                     children: [{ name: 'child folder',
+                                                                                                       children: [{ name: 'hello' },{ name: 'wat' }]},
+                                                                                { name: 'hello' },
+                                                                                { name: 'wat' },
+                                                                                {name: 'child folder',
+                                                                                                      children: []}, 
+                                                                               ]}
+                                              ]},
+                  {name: 'My Tree2',
+                                    children: [{ name: 'hello' },
+                                               { name: 'wat' },
+                                               {name: 'child folder',
+                                                                     children: [{ name: 'child folder',
+                                                                                                       children: [{ name: 'hello' },{ name: 'wat' }]},
+                                                                                { name: 'hello' },
+                                                                                { name: 'wat' },
+                                                                                {name: 'child folder',
+                                                                                                      children: [{ name: 'hello' },{ name: 'wat' }]} 
+                                                                               ]}
+                                              ]},
+                ];
+function expend(data){
+      var data=data;
+      data.forEach(function(o){
+           if(o.children){
+               o.isFolder=true;
+               o.leaf = false;
+               expend(o.children);
+           }else{
+              o.leaf = true;
+           }
+      });
+     return data;
+    }
+
+ data=expend(data); 
+// define the item component
+Vue.component('item', {
+  template: '#item-template',
+  props: {
+    models: Array
+  },
+  data: function () {
+    return {
+     
+    }
+  },
+  computed: {
+    
+  },
+  methods: {
+     
+  },
+});
+
+// boot up the demo
+var demo = new Vue({
+  el: '#demo',
+  data: {
+    treeData: data
+  }
+})
+
+   </script>
+</body>
+</html>
