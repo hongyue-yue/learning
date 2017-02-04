@@ -2,14 +2,27 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	  <title>vueTreeLi</title>\
-    <link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+	  <title>vueTreeLi</title>
+    <!--<link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">-->
     <script type="text/javascript" src="http://cdn.bootcss.com/vue/1.0.18/vue.js"></script>
     <style type="text/css">
     	ul,li{list-style-type:none;}
     	.item {cursor: pointer;}
       .bold {font-weight: bold;}
-      ul {padding-left:1em;line-height: 1.5em;}
+      ul {padding-left:18px;line-height: 22px;}
+
+      .glyphicon{
+         width:20px;height:20px;display:inline-block;box-sizing:border-box;position:relative;top:2px;right:-2px;
+       } 
+       .glyphicon-plus{background-image:url("../../images/icon/files.png");background-repeat:no-repeat;background-size:100% 100%;}
+       .glyphicon-minus{background-image:url("../../images/icon/files-open.png");background-repeat:no-repeat;background-size:100% 100%;}
+       .glyphicon-leaf{background-image:url("../../images/icon/file.png");background-repeat:no-repeat ;background-size:100% 100%;}
+       .up{background-image:url("../../images/arrow_1.png");background-repeat:no-repeat ;background-size:100% 100%;}
+       .down{background-image:url("../../images/arrow_2.png");background-repeat:no-repeat ;background-size:100% 100%;}
+       .arrow{width:12px;height:8px;display:inline-block;position:relative;top:-3px;}
+
+       .margin_1{margin:0 0 0 20px;}
+       .margin_2{margin:0;}
     </style>
 </head>
 <body>
@@ -18,11 +31,13 @@
           <item  class="item" :models="treeData"></item>
        </ul>
    </div>
-   <template id="item-template">
+   <script type="text/x-template" id="item-template">
    	  <li v-for="model in models">
-        <div :class="{'bold':model.children}"  @click="model.isFolder=!model.isFolder" >
+        <div :class="{'bold':model.children}"  >
+           <span class="arrow" v-if="model.children" :class="{'up':model.isFolder,'down':!model.isFolder}" @click="model.isFolder=!model.isFolder" ></span>
+           <input type="checkbox" :class="{'margin_1':!model.children,'margin_2':model.children}">
            <span class="glyphicon"  v-bind:class="{'glyphicon-minus': !model.leaf && model.isFolder, 'glyphicon-plus': !model.leaf && !model.isFolder, 'glyphicon-leaf': model.leaf}">
-            </span>         
+           </span>         
           {{model.name}}
           <!--<span v-if="model.children">[{{model.isFolder ? '-' : '+'}}]</span>-->
         </div>
@@ -30,7 +45,7 @@
           <item  class="item" :models="model.children"></item>
         </ul>
       </li>
-   </template>
+   </script>
 
    <script type="text/javascript">
    	  var data =[ {name: 'My Tree1',

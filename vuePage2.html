@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>vuePage2</title>
+	<script  src="http://cdn.bootcss.com/vue/1.0.18/vue.js"></script>
+	<style type="text/css">
+		    html,body{width:100%;height:100%}
+        #app{width:80%;height:60%;}
+        .box {width:100%;height:100%;position:relative;}
+
+       thead,tbody{width:100%;}
+       table{width:100%;border-collapse:collapse;border-spacing:1px;position:relative;}
+       th {font-weight: normal;background-color:#5daaca;color:#fff;text-align: center;}
+       td{color:#333}
+       th,td{text-align:left;height:30px;padding:5px;border:1px dotted #ccc ;} 
+       tbody tr:nth-of-type(odd){background-color:#fff;}
+       tbody tr:nth-of-type(even){background:#F0F0F0;}
+
+       .table{width:100%;height:90%;overflow: auto;margin: 0;}
+       .foot{width:100%;background-color:#E8E8E8;position:absolute;bottom:0;height:40px;}
+
+       .boot{width:100%;height:100%;}
+       .boot>span{display:inline-block;height:24px;line-height:24px;margin:8px 2px;}
+       .boot input{width:40px;text-align:center;margin:0 5px;}
+       .arrow{width:24px;border-radius:50%;border:1px dotted #1296db;}
+
+       .form-control{height:24px;width:50px;padding:0 8px;font-size: 12px;
+                     color:#555;background-color:#fff;
+                     border:1px solid #ccc;border-radius:4px;}
+
+       select{
+           border: solid 1px #000;
+           appearance:none;
+          -moz-appearance:none;
+          -webkit-appearance:none;
+          background: url("../../images/icon/arrow.png") no-repeat;
+          background-size: 20%;
+          background-position: 80% 50%;
+       }
+       select::-ms-expand {display:none;}
+	</style>
+</head>
+<body>
+   <div id="app">
+    <page :lists="treeData"></page>
+   </div>
+   <script type="text/x-template" id="main">
+    <div class="box" id="box">
+      <div class="table" id="header">
+        <table >
+        <thead>
+            <tr>
+                <th width="10%" >id</th>
+                <th width="30%" >name</th>
+                <th width="40%" >content</th>
+                <th width="20%" >remark</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="data in tableList">
+                <td v-text="data.num" ></td>
+                <td v-text="data.author" ></td>
+                <td v-text="data.contents" ></td>
+                <td v-text="data.remark" ></td>
+            </tr>
+        </tbody>
+        </table>
+      </div>
+      <div class="foot" id="foot">
+         <boot-page  :data="lists" ></boot-page>
+      </div>
+    </div>
+   </script>
+   
+   <script type="text/x-template" id="bootpage">
+   	<div class="boot">
+      <select class="form-control" v-model="len" style="margin-left:15px">
+        <option v-for="arr in lens" :value="arr" v-text="arr" ></option>
+      </select>
+   	  <span @click="onFirstClick()" class="arrow" ><<</span>
+   	  <span @click="onPrevClick()">&lt;</span>
+   	  <span>当前在第<input type="text" v-model="currPage" >页/共<span v-text="pageTotal"></span>页</span>
+   	  <span @click="onNextClick()">&gt;</span>
+   	  <span @click="onLastClick()">>></span>
+      <span style="float:right;margin-right:15px;">当前显示<span v-text="a"></span>-<span v-text="b"></span>条记录/共
+           <span v-text="data.length"></span>条
+      </span>
+   	</div>
+   </script>
+   
+   <script type="text/javascript" >
+   	var list=[
+                {num: 1, author: 'luozh', contents: 'BootPage是一款支持静态数据和服务器数据的表格分页组件', remark: 'dsds'},
+                {num: 2, author: 'luozh', contents: '支持调整每页显示行数和页码显示个数，样式基于bootstrap', remark: 'dsds'},
+                {num: 3, author: 'luozh', contents: '<boot-page>标签中async指是否从服务器端获取数据，false为否', remark: 'dsds'},
+                {num: 4, author: 'luozh', contents: 'data为静态的表格数据数组；', remark: 'dsds'},
+                {num: 5, author: 'luozh', contents: 'lens为每页显示行数的数组', remark: 'dsds'},
+                {num: 6, author: 'luozh', contents: 'page-len为可显示的页码数', remark: 'dsds'},
+                {num: 7, author: 'luozh', contents: '服务器回传参数为{data:[], page_num: 6}, 其中data为表格数据，page_num为总页数', remark: 'dsds'},
+                {num: 8, author: 'luozh', contents: '可以调用this.$refs.page.refresh()刷新表格数据', remark: 'dsds'},
+                {num: 9, author: 'luozh', contents: 'BootPage是一款支持静态数据和服务器数据的表格分页组件', remark: 'dsds'},
+                {num: 10, author: 'luozh', contents: '支持调整每页显示行数和页码显示个数，样式基于bootstrap', remark: 'dsds'},
+                {num: 11, author: 'luozh', contents: '<boot-page>标签中async指是否从服务器端获取数据，false为否', remark: 'dsds'},
+                {num: 12, author: 'luozh', contents: 'data为静态的表格数据数组；', remark: 'dsds'},
+                {num: 13, author: 'luozh', contents: 'lens为每页显示行数的数组', remark: 'dsds'},
+                {num: 14, author: 'luozh', contents: 'page-len为可显示的页码数', remark: 'dsds'},
+                {num: 15, author: 'luozh', contents: '服务器回传参数为{data:[], page_num: 6}, 其中data为表格数据，page_num为总页数', remark: 'dsds'},
+                {num: 16, author: 'luozh', contents: '可以调用this.$refs.page.refresh()刷新表格数据', remark: 'dsds'},
+                {num: 17, author: 'luozh', contents: 'BootPage是一款支持静态数据和服务器数据的表格分页组件', remark: 'dsds'},
+                {num: 18, author: 'luozh', contents: '支持调整每页显示行数和页码显示个数，样式基于bootstrap', remark: 'dsds'},
+                {num: 19, author: 'luozh', contents: '<boot-page>标签中async指是否从服务器端获取数据，false为否', remark: 'dsds'},
+                {num: 20, author: 'luozh', contents: 'data为静态的表格数据数组；', remark: 'dsds'},
+                {num: 21, author: 'luozh', contents: 'lens为每页显示行数的数组', remark: 'dsds'},
+                {num: 22, author: 'luozh', contents: 'page-len为可显示的页码数', remark: 'dsds'},
+                {num: 23, author: 'luozh', contents: '服务器回传参数为{data:[], page_num: 6}, 其中data为表格数据，page_num为总页数', remark: 'dsds'},
+                {num: 24, author: 'luozh', contents: '可以调用this.$refs.page.refresh()刷新表格数据', remark: 'dsds'},
+                {num: 25, author: 'luozh', contents: 'BootPage是一款支持静态数据和服务器数据的表格分页组件', remark: 'dsds'},
+                {num: 26, author: 'luozh', contents: '支持调整每页显示行数和页码显示个数，样式基于bootstrap', remark: 'dsds'},
+                {num: 27, author: 'luozh', contents: '<boot-page>标签中async指是否从服务器端获取数据，false为否', remark: 'dsds'},
+                {num: 28, author: 'luozh', contents: 'data为静态的表格数据数组；', remark: 'dsds'},
+                {num: 29, author: 'luozh', contents: 'lens为每页显示行数的数组', remark: 'dsds'},
+                {num: 30, author: 'luozh', contents: 'page-len为可显示的页码数', remark: 'dsds'},
+                {num: 31, author: 'luozh', contents: '服务器回传参数为{data:[], page_num: 6}, 其中data为表格数据，page_num为总页数', remark: 'dsds'},
+                {num: 32, author: 'luozh', contents: '可以调用this.$refs.page.refresh()刷新表格数据', remark: 'dsds'}
+            ]; // 表格原始数据
+/*
+Vue.component('bootPage', {
+      template: '#bootpage',
+      props: {
+        // 表格数据（数组）
+        data: {
+            type: Array,
+            default: function () {
+                return []
+            }
+        },   
+    },
+    data () {
+        return {
+            activeNum: 1,
+            pageTotal:1,
+            len:10,
+            currPage:1,
+            a:0,
+            b:0,
+        }
+    },
+    methods: {
+        
+        // 上一页
+        onPrevClick () {
+            if(this.activeNum==1){
+            	return ;
+            }else{
+            	this.activeNum-=1;
+            }
+        },
+        // 下一页
+        onNextClick () {
+            if(this.activeNum==this.pageTotal){
+            	return ;
+            }else{
+            	this.activeNum+=1;
+            }
+        },
+        // 第一页
+        onFirstClick () {
+            if(this.activeNum==1){
+            	return 
+            }else{
+            	this.activeNum=1;
+            }
+        },
+        // 最后一页
+        onLastClick () {
+            if(this.activeNum==this.pageTotal){
+            	return
+            }else{
+            	this.activeNum=this.pageTotal;
+            }
+        },
+        // 获取页码
+        getPages () {
+              this.pageTotal = Math.ceil(this.data.length / this.len)
+        },
+        // 页码变化获取数据
+        getData () {
+                let len = this.len;
+                this.currPage=this.activeNum;
+                let pageNum = this.activeNum-1;
+                let newData = [];
+                for (let i = pageNum * len; i < (pageNum * len + len); i++) {
+                    this.data[i] !== undefined ? newData.push(this.data[i]) : ''
+                }
+                this.$dispatch('data', newData);
+                this.a=pageNum * len + 1;
+                this.b=pageNum * len + newData.length;  
+        },
+    },
+    ready () {
+        //console.log("111");
+        this.getPages()
+        this.getData()
+    },
+    watch: {
+        // 监测当前页变化
+        'activeNum' (newVal, oldVal) {
+            	this.getData();  
+        },
+        'currPage' (newVal, oldVal) {
+        	 if(typeof(newVal)=='number') return ;
+        	 newVal=parseInt(newVal);
+             if(0<newVal&&newVal<=this.pageTotal){
+                this.activeNum=newVal;
+             }
+        }
+    },
+    });
+
+
+Vue.component('page', {
+      template: '#main',
+        props:{
+            lists: {
+              type: Array,
+              default: function () {
+                return []
+               }
+            },
+        },
+        data () {
+            return{
+            tableList: [] // 分页组件传回的分页后数据 
+           }
+        },
+        ready(){
+            var boxHei=document.getElementById("box").clientHeight;
+           // console.log(boxHei);
+            document.getElementById("header").style.height=boxHei-40+"px";
+        },
+        methods: {
+            },
+        events: {
+        // 分页组件传回的表格数据
+             'data' (data) {
+                  this.tableList = data;
+            },
+        }
+     });
+    
+var vm=new Vue({
+        el:"#app",
+        data: {
+             treeData:list
+        },
+    })*/
+
+   </script>
+   <script type="text/javascript" src="./vuePage2.js"></script>
+</body>
+</html>
