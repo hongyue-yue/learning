@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title></title>
+	<script type="text/javascript" src="https://cdn.bootcss.com/d3/4.5.1/d3.js"></script>
+</head>
+<body>
+  <p>a</p>
+  <p>df</p>
+  <p>asdf</p>
+  <script type="text/javascript">
+  	var a=["dadf","156","fda156"];
+  	var body=d3.select("body");
+  	var p=body.selectAll("p");
+  	p.data(a)
+  	 .text(function(d,i){
+       return "第 "+ i + " 个元素绑定的数据是 " + d;
+  	})
+  </script>
+</body>
+</html>
