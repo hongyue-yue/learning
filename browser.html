@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+	<title>浏览器测试</title>
+</head>
+<body>
+    <script type="text/javascript">
+      function browser(){
+        var Sys = {};
+        var ua = navigator.userAgent.toLowerCase();
+        var s;
+        if(ua.match(/rv:([\d.]+)/)&&!ua.match(/firefox\/([\d.]+)/)){
+            (s = ua.match(/rv:([\d.]+)/))? Sys.ie = s[1]:null;
+        }
+        (s = ua.match(/msie ([\d.]+)/)) ? Sys.ie = s[1] :null;
+        (s = ua.match(/chrome\/([\d.]+)/)) ? Sys.chrome = s[1] :null;
+        (s = ua.match(/firefox\/([\d.]+)/)) ? Sys.firefox = s[1] :null;
+        (s = ua.match(/opera.([\d.]+)/)) ? Sys.opera = s[1] :null;
+        (s = ua.match(/version\/([\d.]+).*safari/)) ? Sys.safari = s[1] : null;
+        //以下进行测试
+        return Sys
+       }
+        console.log(parseInt(browser().ie))
+        /*if (Sys.ie) alert('IE: ' + Sys.ie);
+        if (Sys.firefox) alert('Firefox: ' + Sys.firefox);
+        if (Sys.chrome) alert('Chrome: ' + Sys.chrome);
+        if (Sys.opera) alert('Opera: ' + Sys.opera);
+        if (Sys.safari) alert('Safari: ' + Sys.safari);*/
+  </script>
+</body>
+</html>
