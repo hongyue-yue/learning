@@ -66,6 +66,7 @@ module.exports = {
                   collapseWhitespace: false //删除空白符与换行符
               }
           }),
+          new webpack.HotModuleReplacementPlugin() //热加载
 
     ],
     //使用webpack-dev-server，提高开发效率
