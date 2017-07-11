@@ -1,0 +1,87 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Walkabout Worlds</title>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="css/jquery-ui.min.css" media="all">
+        <link rel="stylesheet" type="text/css" href="css/jquery-ui.structure.min.css" media="all">
+        <link rel="stylesheet" type="text/css" href="css/jquery-ui.theme.min.css" media="all">
+        <link rel="stylesheet" type="text/css" href="css/dropzone.css" media="all">
+        <link rel="stylesheet" type="text/css" href="css/walkaboutsummary.css" media="all">
+	<script src="javascript/jquery.js"></script>
+	<script src="javascript/jquery-ui.min.js"></script>
+	<script src="javascript/walkaboututil.js"></script>
+	<script src="javascript/dropzone.js"></script>
+	<style type="text/css">
+	</style>
+    <script type="text/javascript"  src="javascript/walkaboutsummary.js"></script>
+	
+</head>
+<body style="width:100%">
+<img src="icons/WalkaboutSmall.png"/>&nbsp;&nbsp;<span id="awslink" style="margin-bottom: 10px;">This walkabout has not been published</span> 
+	<div id="header_controls" style="margin-top: 10px">
+	Show Room:
+    <select  id="rooms" class="rooms">
+		<option value="all">All</option>
+		<option value="unassigned">Unassigned</option>
+	</select> 
+    <button onclick="saveAll(true)">Save</button>
+    <button onclick="viewTour(true)">In Line Tour Editor</button>   
+    <button onclick="viewTour()">View Tour</button>
+    <button onclick="uploadToAWS()">Publish</button>
+    <button onclick="viewList()">Return To Walkabout List</button>
+    
+    <br/><br/>
+    Selection:<br/>
+    <button onclick="selectAllTPs()">Select All</button> 
+    <button onclick="deselectAllTPs()">Select None</button>
+     <button id="launch_assigner" >Assign Selected To Room</button> 
+     <button onclick="deleteSelected()">Delete Selected</button> 
+	</div>
+	
+      <div id="delete_images_dialog">
+      Are you sure you want to delete the selected <span id="delete_count">0</span> images?
+      </div>
+      <div id="move_dialog">
+      Assign the selected images to an existing room<br/>
+      <select id="existing_rooms"><option>Eat yer tacos</option></select>
+      <button id="assign_existing">Assign</button><br/>
+      <div id="existing_error" class="error"></div>
+      Or assign them to a new room<br/>
+      <input type="text" id="new_room"/> <button id="assign_new">Create And Assign</button><br/>
+      <div id="new_room_error" class="error">&nbsp;</div>
+      </div>    
+	<form
+      class="dropzone"
+      id="my-awesome-dropzone"></form>
+      <div id="scenes"></div>
+      <div id="room_editor">
+      	<div id="re_controls"><button onclick="roomEditor.close()" style="z-index: 1000">Close</button> 
+      	Rotate Selected: 
+      	<button onclick="roomEditor.rotateSelected(-1)">&lt;</button>
+      	<button onclick="roomEditor.rotateSelected(1)">&gt;</button>
+      	<button onclick="roomEditor.connectui.open()">Add Connection To Another Room</button>
+      	</div>
+      	<div id="re_map" style="position: relative;"></div>
+      	<div id="connection_chooser">
+      	    <div id="connection_start_side" style="display: inline-block; width: 380px; height: 500px; position: relative">
+	      		<img id="connection_main_img" src="null" onclick="roomEditor.connectui.moveDoor(event)" style="height: 360px; width: 360px;"/><br/>
+      			<button id="connect_remove" onclick="roomEditor.connectui.removeConnection()" style="visibility: hidden;">Delete Connection</button>
+      			<div id="connection_door" style="" class="door"></div>
+      			<div style="position: absolute; height: 30px; width: 30px; left: 165px; top: 165px; background-color: blue; border: 1px solid black; border-radius: 50%"></div>
+      	    </div>
+      	    <div style="display: inline-block; width: 380px; height: 500px; position: relative">
+      		<img id="connection_img" src="null" style="height: 360px; width: 360px;"/><br/>
+      		<div style="position: absolute; height: 30px; width: 30px; left: 165px; top: 165px; background-color: blue; border: 1px solid black; border-radius: 50%"></div>
+      		<select id="connection_rooms" class="rooms" onchange="roomEditor.connectui.showRoom()">
+      		</select> 
+      		<button id="connect_bwd" onclick="roomEditor.connectui.rotate(-1)">&lt;</button>
+      		<button id="connect_fwd" onclick="roomEditor.connectui.rotate(1)">&gt;</button><br/>
+      		</div>
+      	</div>
+      </div>
+</body>
+</html>

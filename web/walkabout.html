@@ -1,0 +1,207 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Walkabout World</title>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+<style>
+body {
+	background-color: #000000;
+	margin: 0px;
+	overflow: hidden;
+}
+
+#help1 {
+	opacity: 1.0;
+}
+
+#info {
+	position: absolute;
+	top: 0px;
+	width: 100%;
+	color: #ffffff;
+	padding: 5px;
+	font-family: Monospace;
+	font-size: 13px;
+	font-weight: bold;
+	text-align: left;
+}
+#loading {
+	position: absolute;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+	background-color: white;
+	color: black;
+	padding: 5px;
+	font-family: Monospace;
+	font-size: xx-large;
+	font-weight: bold;
+	text-align: center;
+}
+
+#helpinfo {
+	position: absolute;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.0);
+	color: #ffffff;
+	padding: 5px;
+	font-family: Monospace;
+	font-size: large;
+	font-weight: bold;
+}
+
+.helpbullet {
+	color: red;
+}
+
+.continue {
+	border: 2px solid black; 
+	border-radius: 10%; 
+	padding: 4px; 
+	color: black; 
+	background-color: white; 
+	cursor: pointer;
+	position: relative; float: right;
+}
+
+body {
+-webkit-touch-callout:none;
+-webkit-user-select:none;
+-khtml-user-select:none;
+-moz-user-select:none;
+-ms-user-select:none;
+user-select:none;
+-webkit-tap-highlight-color:rgba(0,0,0,0);
+}
+
+a {
+	color: #ffffff;
+}
+
+.fp_marker {
+	border-radius: 50%;
+	height: 30px;
+	width: 30px;
+	border: 1px solid black;
+	position: absolute;
+	top: 1px;
+	left: 1px;
+	padding: 0px; 
+	margin:0px;
+}
+
+.fp_highlight {
+	background-color: red;
+	border-top-right-radius: 0%;
+}
+
+.boxclose{
+    float:right;
+    margin-top:2px;
+    margin-right:2px;
+    cursor:pointer;
+    color: #fff;
+    border: 1px solid #AEAEAE;
+    border-radius: 30px;
+    background: #605F61;
+    font-size: 31px;
+    font-weight: bold;
+    display: inline-block;
+    line-height: 0px;
+    padding: 11px 3px;    
+}
+
+.boxclose:before {
+    content: "×";
+}
+</style>
+<link rel="stylesheet" type="text/css" href="css/jquery-ui.min.css" media="all">
+
+</head>
+<body  onkeydown="moveAround(event)">
+
+	<div id="container" style="cursor: all-scroll;"></div>
+	<div id="info" class="uicontrol">
+		<select id="rooms"  class="uicontrol"></select>
+		<button id="map_button"  class="uicontrol" style="visibility: hidden;" onclick="floorPlan.show()">Floor Plan</button>
+		<input id="cardboard" type="image" onclick="tourManager.toCardboard()" src="icons/cardboard.png" height="30px" width="30px" style="background-color: white;  position: relative; float: right; margin-right: 20px; background-color: transparent;"/>
+		<input id="compass" type="image" onclick="tourManager.toCompass()" src="icons/compass.png" height="30px" width="30px" style="background-color: white;  position: relative; float: right; margin-right: 20px; background-color: transparent;"/>
+	</div>
+	<div id="rotate_div">
+	</div>
+	<div id="message" style="position: absolute; width: 50%; left: 25%; top: 5%; color: white; background-color: grey; opacity: 0.9; visibility: hidden; font-size: x-large; text-align: center; padding: 20px;">
+	This is a message
+	</div>
+	<div id="floor_plan_display" style="position: absolute; left: 0px; top: 0px; visibility: hidden; background-color: white; width: 33%; padding: 0px; margin:0px;" >
+		<a class="boxclose" href="javascript:void(0);" onclick="console.debug('foo');floorPlan.close()"> </a>
+		<img id="floor_plan_image" src="tours/DemoForThad/FloorPlan.JPG" onclick="floorPlan.move(event)" style="width: 100%; padding: 0px; margin:0px;"/>
+	</div>
+	<div id="helpinfo"  onclick="stepThruHelp()">
+		<div style="width: 350px; margin: 0 auto; background-color: rgba(0, 0, 0, 0.5); padding: 10px;">
+		<div id="help1">
+		<span class="mobile_help">To walk forward, tap wherever you see a green sphere<br/><br/>
+			<svg height="60" width="100">
+  				<circle cx="30" cy="30" r="25" stroke="white" stroke-width="0" fill="#33a532" opacity="0.4"/>
+			</svg><br/>		
+			Use the dropdown to jump to another area <select id="rooms_help"><option>Room Name</option></select><br/><br/>
+		</span>
+		<span class="desktop_help">To walk forward, click wherever you see a green sphere<br/><br/>
+			<svg height="60" width="100">
+  				<circle cx="30" cy="30" r="25" stroke="white" stroke-width="0" fill="#33a532" opacity="0.4"/>
+			</svg><br/>
+			Or press the 'W' key<br/><br/>
+			Use the dropdown to jump to another area <select id="rooms_help"><option>Room Name</option></select><br/><br/>
+		</span>		
+		<span class="vr_help">To walk, push your headset button so it taps the screen wherever you see a green sphere<br/>
+			<svg height="60" width="100">
+  				<circle cx="30" cy="30" r="25" stroke="black" stroke-width="0" fill="#33a532" />
+			</svg><br/>
+		</span>
+		<span class="continue">NEXT</span>	
+	</div>
+	<div id="help2" style="visibility: hidden">
+	<div class="mobile_help">
+	<span class="helpbullet">
+	Move your phone in the direction you want to look.<br/>
+	<br/>
+	</span><br/>
+	</div>
+	<div class="desktop_help">
+	To look around, click and drag the image
+	or use the keyboard arrow keys<br/><br/>	
+	<br/>
+	</div>
+	<div class="vr_help">
+	Turn your head in whatever direction you want to look<br/><br/>
+	</div>
+	<span class="continue">START</span><br/><br/>
+	
+	</div>
+		</div>
+	</div>
+	<div id="transdiv" style="visibility: hidden; position: absolute; left: 0px; top: 0px; width:100%; height: 100%">	
+		<canvas id="transimg" style="height: 100%; width: 100%"></canvas>
+		
+	</div>
+	<div id="loading">
+	<img src="icons/WalkaboutLarge.png" width="50%"/><br/>
+	<span>LOADING</span>
+	<div id="percent_loaded">0%</div>
+		</div>
+	<script src="javascript/jquery.js"></script>
+	<script src="javascript/jquery-ui.min.js"></script>
+	<script src="javascript/three.min.js"></script>
+	<script src="javascript/StereoEffect.js"></script>
+	<script src="javascript/OrbitControls.js"></script>
+	<script src="javascript/DeviceOrientationControls.js"></script>
+	<!-- <script src="javascript/OculusRiftEffect.js"></script> -->
+	<script src="javascript/SphereViewer.js"></script>
+	<script src="javascript/walkaboututil.js"></script>
+	<script src="javascript/walkaboutviewer.js"></script>
+</body>
+</html>

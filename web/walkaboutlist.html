@@ -1,0 +1,132 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Local Walkabout Worlds</title>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="css/reset.css" media="all">
+
+        
+        <link rel="stylesheet" type="text/css" href="css/style.css" media="all">
+        
+
+        <!-- Google Fonts embed code -->
+        <script type="text/javascript">
+            (function() {
+                var link_element = document.createElement("link"),
+                    s = document.getElementsByTagName("script")[0];
+                if (window.location.protocol !== "http:" && window.location.protocol !== "https:") {
+                    link_element.href = "http:";
+                }
+                link_element.href += "//fonts.googleapis.com/css?family=Titillium+Web:200italic,200,300italic,300,400italic,400,600italic,600,700italic,700,900";
+                link_element.rel = "stylesheet";
+                link_element.type = "text/css";
+                s.parentNode.insertBefore(link_element, s);
+            })();
+        </script>
+	<script src="javascript/jquery.js"></script>
+	<style type="text/css">
+	.preview_img {
+		width: 100%;
+	}
+	
+	#results {
+		padding: 10px;
+		margin-left: 30px;
+	}
+	
+	table {
+  		border-collapse: collapse;
+	}
+	tr { 
+  		border: solid;
+  		border-width: 1px 0;
+	}
+	.preview {
+		vertical-align: top;
+		width: 45%;
+	}
+	
+	.img_cell {
+		width:45%;
+	}
+	.preview_text {
+		display: inline-block;
+	}
+	.preview_img {
+		width: 200px;
+	}
+	.title {
+		font-size: 24px;
+	}
+	.waitem {
+		width: 100%;
+	}
+	</style>
+    <link rel="stylesheet" type="text/css" href="css/base.css" media="all">
+    <script type="text/javascript">
+    	$(document).ready(loadResults);
+    	function loadResults(){
+    		$.ajax({url:"walkabout_list",
+    			success: insertResults,
+    			dataType:"json",
+    			error: function(status,xhr){
+    				alert("Failed to load results "+JSON.stringify(status));
+    				console.debug(status);
+    				console.debug(xhr);
+    			}
+    		});
+
+    	}
+    	
+    	function addNewWalkabout(){
+    		var name = prompt("Enter the name of your new Walkabout");
+    		$.ajax({url:"new_walkabout",
+    			success: function(data){window.location = "WalkaboutSummary.html?tourid="+name;},
+    			type:"POST",
+    			data:{
+    				"name":name
+    			},
+    			dataType:"json",
+    			error: function(status,xhr){
+    				alert("Could not create new Walkabout: "+JSON.stringify(status));
+    				console.debug(status);
+    				console.debug(xhr);
+    			}
+    		});    		
+    	}
+    	function isMobile(){
+    		return (typeof window.orientation !== 'undefined');
+    	}
+    	
+    	function insertResults(data){
+    		//var page = isMobile() ? "Walkabout.jsp" : "WideScreen.jsp";	
+    		for(var i=0;i<data.length;i++){
+    			var tmp = data[i];
+    			var cloud_link="";
+    			if(tmp.cloud_url){
+    				cloud_link = "<br/><a href=\""+tmp.cloud_url+"\" target='_blank'>View Published Version</a>";
+    			}
+    			var html = "<tr><td class='preview'><a class='title' href='walkabout.html?tour=tours/"+tmp.name+"/scenes.json'>"+tmp.name+"</a><br/>"+
+    			"<a href='WalkaboutSummary.html?tourid="+tmp.name+"'>Edit</a> "+
+    			"<a href='walkabout.html?tour=tours/"+tmp.name+"/scenes.json'>View</a>"+cloud_link+"</td><td>"+
+    			'<img class="preview_img" src="'+tmp.coverImage+'"/>'+
+    			"</td></tr>";
+				$('#results').append(html);				
+    		}
+    		
+    	}
+    </script>
+	
+</head>
+<body style="width:100%">
+	<img src="icons/WalkaboutSmall.png"/> 
+	<p class="weight7" style="padding: 3px; padding-top: 20px;">Local Walkabouts <a  class="weight7" href="walkaboutcloudlist.html">(Click here to see published Walkabouts)</a></p> 	
+	<br/>
+	<button onclick="addNewWalkabout()" style="margin-left: 10px">Create New Walkabout</button><br/><br/><br/>
+	<table id="results" ></table>
+	
+</body>
+</html>

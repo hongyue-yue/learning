@@ -1,0 +1,52 @@
+body {
+	background-color: white;
+	margin-top: 0px;
+	padding-top: 0px;
+}
+
+
+p {
+   max-width: 10000px;
+   margin-left: 10px;
+}
+.maincontent {
+	margin: 10px;
+	max-width: 100000px;
+}
+
+.wwlink {
+	display: inline-block;
+	width: 30%;
+}
+.wwlink img {
+	width: 100%;
+}
+
+.point {
+	 font-family: "Titillium Web";
+	 font-weight: 200;
+	 font-style: italic;
+	 font-size: 21px;
+	 line-height: 30px;
+
+}
+.menu_item {
+	 font-family: "Titillium Web";
+	 font-weight: 200;
+	 font-style: italic;
+	 font-size: 21px;
+	 line-height: 30px;
+	width: 15%;
+	padding-left: 10px;
+	padding-right: 10px;
+	border-right: 2px solid black;
+	text-decoration: underline;
+}
+
+
+#menu {
+	width: 100%;
+	text-align: left;
+	padding-bottom: 10px;
+}
+
