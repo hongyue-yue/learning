@@ -15,7 +15,7 @@
       <li><a href="http://router.vuejs.org/" target="_blank">vue-router list</a></li>
       <li><a href="http://vuex.vuejs.org/" target="_blank">vuex list</a></li>
       <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader list</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue list</a></li>
+      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
       <li><a target="_blank">{{data | formatDateTime}}</a></li>
     </ul>
   </div>
