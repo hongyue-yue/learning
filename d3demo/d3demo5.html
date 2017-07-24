@@ -106,7 +106,7 @@
  	.domain([0,maxdata])
  	.range([h-foot_height,head_height]);
  	 
- 	//定义横轴网格线
+ 	/*//定义横轴网格线
  	var xInner = d3.svg.axis()
  	.scale(xScale)
  	.tickSize(-(h-head_height-foot_height),0,0)
@@ -132,7 +132,7 @@
  	var yInnerBar=svg.append("g")
  	.attr("class", "inner_line")
  	.attr("transform", "translate("+padding+",0)")
- 	.call(yInner);
+ 	.call(yInner);*/
  	 
  	//定义横轴
  	var xAxis = d3.svg.axis()
@@ -172,7 +172,7 @@
  	for(i=0;i<currentLineNum;i++){
  	    var newLine=new CrystalLineObject();
  	    newLine.init(i);
- 	    lines.push(newLine);
+ 	    //lines.push(newLine);
  	}
  	 
  	//重新作图

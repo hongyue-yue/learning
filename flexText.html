@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width,initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<title>flex</title>
+	<style type="text/css">
+  *{margin:0;padding:0}
+  html,body{height:100%;}
+		.HolyGrail {
+           display: flex;
+           height: 100%;
+           flex-direction: column;
+        }
+        header{background-color:#AC7F7F;}
+        footer{background-color:#5550A7;}
+        .HolyGrail-content{background-color:#E09E4F}
+        .HolyGrail-ads{background-color:#5DEA8B}
+        .HolyGrail-nav{background-color:#DC42E8}
+        header,
+        footer {
+          flex:1;
+          display: flex;
+          justify-content:center;
+          align-items: center;
+        }
+
+        .HolyGrail-body {
+          display: flex;
+          flex:6;
+        }
+
+        .HolyGrail-nav {
+          flex:1 ;
+        }
+
+        .HolyGrail-content, .HolyGrail-ads {
+          flex: 0 0 80px;
+        }
+        .table-cell{
+          display:flex;
+          flex-direction:row;
+          justify-content:center;
+          align-items: center; 
+        }
+        p{padding:10px;box-sizing:border-box;}
+	</style>
+</head>
+<body class="HolyGrail">
+  <header>header</header>
+  <div class="HolyGrail-body">
+    <main class="HolyGrail-content table-cell"><p>啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊</p></main>
+    <nav class="HolyGrail-nav table-cell">nav</nav>
+    <aside class="HolyGrail-ads table-cell">aside</aside>
+  </div>
+  <footer>footer</footer>
+</body>
+</html>

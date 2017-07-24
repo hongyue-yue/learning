@@ -39,7 +39,7 @@
                               .append("g")
                               .attr("transform", "translate(40,0)");
 
-   d3.json("/d3demo/city.json", function(error, root) {
+   d3.json("http://localhost:8090/应用管理中心/d3demo/city.json", function(error, root) {
         var nodes = cluster.nodes(root);
         var links = cluster.links(nodes);
         console.log(nodes);
