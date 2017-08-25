@@ -1,6 +1,6 @@
-const superagent = require('superagent');
-const async = require('async');
-const saveData=require('./saveData');
+var superagent = require('superagent');
+var async = require('async');
+var saveData=require('./saveData');
 function getData(city, position){
   let ok = 0;
   let page = 1;
@@ -23,7 +23,7 @@ function getData(city, position){
                let dataObj = JSON.parse(res.text);
                console.log('111')
                if (dataObj.success === true) {
-                 console.log('222')
+                   console.log('222');
                    page=Math.ceil(dataObj.content.positionResult.totalCount / 15);
                    cb(null, page);
                } else {
@@ -32,8 +32,7 @@ function getData(city, position){
            });
      },
      (cb)=>{
-
-       for (let i = 1; i <= page; i++) {
+       for (var i = 1; i <= page; i++) {
            urls.push({url:'https://www.lagou.com/jobs/positionAjax.json?px=default&city='+city+'&needAddtionalResult=false&isSchoolJob=0',page:i})
        }
        console.log(`${city}的${position}职位共${page}条数据，${urls.length}页`);

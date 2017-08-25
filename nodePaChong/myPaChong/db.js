@@ -1,5 +1,5 @@
-
-var MongoClient = require('mongodb').MongoClient,
+var Db = require('mongodb').Db,
+    Connection = require('mongodb').Connection,
     Server = require('mongodb').Server;
 
-module.exports = new MongoClient(new Server('localhost', 27017),{native_parser: true});
+module.exports = new Db('pachong', new Server('localhost',27017), {safe: true});
