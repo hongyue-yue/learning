@@ -20,7 +20,7 @@ app.get('/datas',function(req,res){
          }
        }
        comArray.forEach(function(collName){
-            db.collection(collName).find().toArray(function(err,arr){
+            db.collection(collName).find({city:'上海'}).toArray(function(err,arr){
               computes=computes.concat(arr)
               if(computes.length==comArray.length) res.send(computes)
             })
