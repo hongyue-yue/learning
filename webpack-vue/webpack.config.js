@@ -25,7 +25,14 @@ module.exports = {
         loaders: [
             {
                test: /\.vue$/,
-               loader: 'vue-loader',
+               use: [{
+                    loader: 'vue-loader',
+                    options: {
+                        loaders: {
+                            css: ExtractTextPlugin.extract({ fallback: 'vue-style-loader', use: 'css-loader' })
+                        }
+                    }
+                }]
             },
             {
               test: /\.js$/,
@@ -67,7 +74,8 @@ module.exports = {
                   collapseWhitespace: false //删除空白符与换行符
               }
           }),
-          new webpack.HotModuleReplacementPlugin() //热加载
+          new webpack.HotModuleReplacementPlugin(), //热加载
+          new ExtractTextPlugin({ filename: 'css/[name].css', disable: false, allChunks: true })
 
     ],
     //使用webpack-dev-server，提高开发效率
