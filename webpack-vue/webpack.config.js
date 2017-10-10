@@ -47,6 +47,13 @@ module.exports = {
               test: /\.(html|tpl)$/,
               loader: 'html-loader'
             },
+            { test: /\.(png|jpg|jpeg|gif)$/,
+              loader: 'url-loader',
+              query: {
+                     limit: 8192,
+                     name: 'img/[name].[ext]'
+              }
+            },
         ]
     },
     plugins: [

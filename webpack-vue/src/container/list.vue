@@ -18,7 +18,10 @@
       <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
       <li><a target="_blank">{{data | formatDateTime}}</a></li>
     </ul>
+    <img src="../img/logo.png">
+    <img src="../img/P_09.jpg">
   </div>
+
 </template>
 
 <script>
