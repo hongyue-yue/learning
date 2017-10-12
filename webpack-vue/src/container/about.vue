@@ -17,15 +17,33 @@
       <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader about</a></li>
       <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue about</a></li>
     </ul>
+    <checkbox v-model="foo"></checkbox><selected v-model="selected" :selectData="selectData"></selected>
   </div>
 </template>
 
 <script>
+import checkbox from './in-checkbox.vue'
+import selected from './in-selected.vue'
 export default {
   name: 'hello',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      msg: 'Welcome to Your Vue.js App',
+      foo:false,
+      selected:2,
+      selectData:[{value:1,text:'a'},{value:2,text:'b'},{value:3,text:'c'}]
+    }
+  },
+  components:{
+    checkbox,
+    selected
+  },
+  watch:{
+    foo:function(newVal,oldVal){
+      console.log(newVal,oldVal)
+    },
+    selected:function(newVal,oldVal){
+      console.log(newVal,oldVal)
     }
   }
 }
