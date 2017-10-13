@@ -17,7 +17,7 @@
       <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader about</a></li>
       <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue about</a></li>
     </ul>
-    <checkbox v-model="foo"></checkbox><selected v-model="selected" :selectData="selectData"></selected>
+    <checkbox v-model="foo" :disabled="disabled"></checkbox><selected v-model="selected" :selectData="selectData"></selected>
   </div>
 </template>
 
@@ -31,6 +31,7 @@ export default {
       msg: 'Welcome to Your Vue.js App',
       foo:false,
       selected:2,
+      disabled:false,
       selectData:[{value:1,text:'a'},{value:2,text:'b'},{value:3,text:'c'}]
     }
   },

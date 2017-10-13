@@ -1,6 +1,6 @@
 <template >
   <span id="input">
-    <input type="checkbox" :checked="checked"  @change="emitChange($event.target.checked)">
+    <input type="checkbox" :checked="checked" :disabled="disabled"  @change="emitChange($event.target.checked)">
   </span>
 </template>
 
@@ -9,6 +9,7 @@ export default {
   name:"input",
   props:{
     checked:Boolean,
+    disabled:{type:Boolean,default:false},
   },
   model: {
     prop: 'checked',
