@@ -17,7 +17,14 @@
       <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader about</a></li>
       <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue about</a></li>
     </ul>
-    <checkbox v-model="foo" :disabled="disabled"></checkbox><selected v-model="selected" :selectData="selectData"></selected>
+    <el-select v-model="value" placeholder="请选择">
+    <el-option
+      v-for="item in options"
+      :key="item.value"
+      :label="item.label"
+      :value="item.value">
+    </el-option>
+  </el-select>
   </div>
 </template>
 
@@ -32,7 +39,12 @@ export default {
       foo:false,
       selected:2,
       disabled:false,
-      selectData:[{value:1,text:'a'},{value:2,text:'b'},{value:3,text:'c'}]
+      selectData:[{value:1,text:'a'},{value:2,text:'b'},{value:3,text:'c'}],
+      options:[{
+        label:'全部',
+        value:'-100'
+      }],
+      value:''
     }
   },
   components:{
@@ -52,6 +64,8 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
+
 h1, h2 {
   font-weight: normal;
 }
@@ -67,6 +81,6 @@ li {
 }
 
 a {
-  color: #42b983;
+  color: black;
 }
 </style>
