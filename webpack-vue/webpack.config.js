@@ -14,7 +14,7 @@ module.exports = {
     output: {
        path: path.join(__dirname, 'dist'), //输出目录的配置，模板、样式、脚本、图片等资源的路径配置都相对于它
        publicPath: '/dist/',                //模板、样式、脚本、图片等资源对应的server上的路径
-       filename: 'js/[name].[chunkhash].js',            //每个页面对应的主js的生成配置
+       filename: 'js/[name].[hash].js',            //每个页面对应的主js的生成配置
        chunkFilename: 'js/[name].chunk.js'   //chunk生成的配置
     },
     resolve: {
@@ -28,14 +28,19 @@ module.exports = {
         loaders: [
             {
                test: /\.vue$/,
-               use: [{
-                    loader: 'vue-loader',
-                    options: {
-                        loaders: {
-                            css: ExtractTextPlugin.extract({ fallback: 'vue-style-loader', use: 'css-loader' })
-                        }
-                    }
-                }]
+               loader: 'vue-loader',
+               options: {
+                    loaders: [
+                        {
+                          test:/\.css$/,
+                          loader: ExtractTextPlugin.extract({fallback: 'vue-style-loader', use: 'css-loader' }),
+                        },
+                        {
+                          test:/\.scss$/,
+                          loader: ExtractTextPlugin.extract({fallback: 'vue-style-loader', use:['css-loader','sass-loader']}),
+                        },
+                    ]
+                }
             },
             {
               test: /\.js$/,
@@ -44,7 +49,7 @@ module.exports = {
             },
             {
               test: /\.css$/,
-              loader: ExtractTextPlugin.extract({ fallback: 'style-loader', use: 'css-loader' }),
+              loader: ExtractTextPlugin.extract({fallback: 'style-loader', use: 'css-loader' }),
             },
             {
               test: /\.(html|tpl)$/,
@@ -104,7 +109,7 @@ module.exports = {
               }
           }),
           //new webpack.HotModuleReplacementPlugin(), //热加载
-          new ExtractTextPlugin({ filename: 'css/[name].[contenthash].css', disable: false, allChunks: true }),
+          new ExtractTextPlugin({ filename: 'css/[name].[hash].css', disable: false, allChunks: true }),
           new UglifyJSPlugin(),
           new webpack.optimize.CommonsChunkPlugin({
                 names: ['vendors'], // 将公共模块提取，生成名为`vendors`的chunk
